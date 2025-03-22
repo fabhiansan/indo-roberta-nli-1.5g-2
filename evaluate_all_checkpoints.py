@@ -56,24 +56,59 @@ class NLIDataset:
         labels = []
         
         for example in examples:
-            # Handle both dict-like objects and Dataset objects
-            if hasattr(example, "get") and callable(example.get):
-                # Dict-like object
-                premises.append(example.get("premise", ""))
-                hypotheses.append(example.get("hypothesis", ""))
-                label = example.get("label", 1)  # Default to neutral if missing
-            else:
-                # Direct attribute access (like for datasets.Dataset)
-                premises.append(example.premise)
-                hypotheses.append(example.hypothesis)
-                label = example.label
+            try:
+                # Handle different types of examples
+                if isinstance(example, dict):
+                    # Dictionary
+                    premise = example.get("premise", "")
+                    hypothesis = example.get("hypothesis", "")
+                    label = example.get("label", 1)  # Default to neutral if missing
+                elif hasattr(example, "premise") and hasattr(example, "hypothesis"):
+                    # Object with attributes
+                    premise = example.premise
+                    hypothesis = example.hypothesis
+                    label = getattr(example, "label", 1)
+                elif isinstance(example, (list, tuple)) and len(example) >= 3:
+                    # List or tuple with at least 3 elements
+                    premise = example[0]
+                    hypothesis = example[1]
+                    label = example[2]
+                else:
+                    # Try to parse as a JSON string
+                    try:
+                        import json
+                        if isinstance(example, str):
+                            data = json.loads(example)
+                            premise = data.get("premise", "")
+                            hypothesis = data.get("hypothesis", "")
+                            label = data.get("label", 1)
+                        else:
+                            # Unknown format, use empty strings
+                            premise = ""
+                            hypothesis = ""
+                            label = 1
+                    except (json.JSONDecodeError, TypeError):
+                        # Not a valid JSON string
+                        premise = ""
+                        hypothesis = ""
+                        label = 1
                 
-            # Process the label
-            if isinstance(label, str):
-                label_map = {"entailment": 0, "neutral": 1, "contradiction": 2}
-                labels.append(label_map.get(label, 1))  # Default to neutral if unknown
-            else:
-                labels.append(label)
+                # Add to lists
+                premises.append(premise)
+                hypotheses.append(hypothesis)
+                
+                # Process the label
+                if isinstance(label, str):
+                    label_map = {"entailment": 0, "neutral": 1, "contradiction": 2}
+                    labels.append(label_map.get(label, 1))  # Default to neutral if unknown
+                else:
+                    labels.append(label)
+            except Exception as e:
+                # Log error and use default values
+                logging.warning(f"Error processing example: {e}")
+                premises.append("")
+                hypotheses.append("")
+                labels.append(1)  # Default to neutral
         
         # Tokenize inputs
         encoded_premises = self.tokenizer(
@@ -335,10 +370,36 @@ def load_indonli_data(split="train"):
     Returns:
         List of examples
     """
-    dataset = load_dataset("afaji/indonli", split=split)
-    logging.info(f"Loaded {len(dataset)} examples from {split} split")
-    
-    return dataset
+    try:
+        dataset = load_dataset("afaji/indonli", split=split)
+        logging.info(f"Loaded {len(dataset)} examples from {split} split")
+        
+        # Convert dataset to list - this helps with compatibility
+        dataset_list = []
+        for i in range(len(dataset)):
+            try:
+                item = dataset[i]
+                # Create a simple dict with the needed fields
+                example = {
+                    "premise": item["premise"] if "premise" in item else "",
+                    "hypothesis": item["hypothesis"] if "hypothesis" in item else "",
+                    "label": item["label"] if "label" in item else 1  # Default to neutral
+                }
+                dataset_list.append(example)
+            except Exception as e:
+                logging.warning(f"Error processing dataset item {i}: {e}")
+                # Add a default example
+                dataset_list.append({
+                    "premise": "",
+                    "hypothesis": "",
+                    "label": 1  # Default to neutral
+                })
+        
+        return dataset_list
+    except Exception as e:
+        logging.error(f"Error loading dataset: {e}")
+        # Return an empty list
+        return []
 
 
 def evaluate_classifier_model(model, dataloader, device):
