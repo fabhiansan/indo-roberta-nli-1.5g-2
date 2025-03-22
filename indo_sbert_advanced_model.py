@@ -236,11 +236,11 @@ class EnhancedClassifierHead(nn.Module):
 
 class SBERTAdvancedModel(nn.Module):
     """
-    Advanced BERT model for sentence embeddings with sophisticated classifier.
+    Advanced SBERT model for sentence embeddings with sophisticated classifier.
     """
     
     def __init__(self, 
-                 model_name,
+                 model_name="firqaaa/indo-sentence-bert-base",
                  pooling_mode="mean_pooling",
                  classifier_hidden_sizes=[512, 256],
                  dropout=0.2,
@@ -249,7 +249,7 @@ class SBERTAdvancedModel(nn.Module):
         Initialize advanced SBERT model.
         
         Args:
-            model_name: Pretrained model name or path
+            model_name: Pretrained SBERT model name or path
             pooling_mode: Pooling strategy ('mean_pooling', 'max_pooling', 'cls', 'attention')
             classifier_hidden_sizes: List of hidden layer sizes for classifier
             dropout: Dropout probability
@@ -258,11 +258,12 @@ class SBERTAdvancedModel(nn.Module):
         super(SBERTAdvancedModel, self).__init__()
         
         # Load model and config
+        # For SBERT, we load the underlying BERT model
         self.bert = AutoModel.from_pretrained(model_name)
         self.config = AutoConfig.from_pretrained(model_name)
         hidden_size = self.config.hidden_size
         
-        # Initialize pooling
+        # SBERT models already have pooling built-in, but we'll add our own for more flexibility
         self.pooling = AdvancedPooling(
             hidden_size=hidden_size, 
             pooling_mode=pooling_mode
@@ -299,13 +300,18 @@ class SBERTAdvancedModel(nn.Module):
         Returns:
             Sentence embedding
         """
-        # Get BERT outputs
+        # Get BERT outputs - we don't need to pass output_hidden_states=True for SBERT
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
         
-        # Apply pooling
-        embeddings = self.pooling(outputs.last_hidden_state, attention_mask)
-        
-        return embeddings
+        # Apply pooling - SBERT models typically return the sentence embedding directly
+        # but we'll apply our custom pooling for more flexibility
+        # Check if this is already a pooled embedding (some SBERT models return this as pooler_output)
+        if hasattr(outputs, 'pooler_output') and outputs.pooler_output is not None:
+            # We have a pooled embedding already, but we can optionally use our pooling instead
+            return self.pooling(outputs.last_hidden_state, attention_mask)
+        else:
+            # No pooled embedding, apply our own
+            return self.pooling(outputs.last_hidden_state, attention_mask)
     
     def forward(self, premise_input_ids, premise_attention_mask, 
               hypothesis_input_ids, hypothesis_attention_mask):

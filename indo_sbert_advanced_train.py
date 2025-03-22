@@ -11,7 +11,7 @@ import logging
 import argparse
 from tqdm import tqdm
 import numpy as np
-from transformers import get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup, AutoTokenizer
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
 # Import our custom modules
@@ -100,7 +100,6 @@ def train_model(
     # Load tokenizer from model
     tokenizer = model.bert.tokenizer if hasattr(model.bert, "tokenizer") else None
     if tokenizer is None:
-        from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(model_name)
     
     # Load training data
@@ -341,7 +340,6 @@ def evaluate_model(model_path, split="test_lay", batch_size=16, max_length=128):
     # Load tokenizer from model
     tokenizer = model.bert.tokenizer if hasattr(model.bert, "tokenizer") else None
     if tokenizer is None:
-        from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(model_path)
     
     # Load data
@@ -442,7 +440,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train advanced SBERT model for NLI")
     
     # Input/output arguments
-    parser.add_argument("--model_name", type=str, default="indolem/indobert-base-uncased",
+    parser.add_argument("--model_name", type=str, default="firqaaa/indo-sentence-bert-base",
                        help="Pretrained model name")
     parser.add_argument("--output_dir", type=str, default="./outputs/indo-sbert-advanced",
                        help="Output directory")
