@@ -54,6 +54,20 @@ class NLIDataset(Dataset):
             "neutral": 1,
             "contradiction": 2
         }
+        
+        # Log label distribution to check for issues
+        self._log_label_distribution()
+    
+    def _log_label_distribution(self):
+        """Log the distribution of labels to help with debugging"""
+        labels = [self.label_map.get(item["label"], -1) for item in self.dataset]
+        label_counts = {}
+        for label in labels:
+            label_counts[label] = label_counts.get(label, 0) + 1
+        
+        logging.info(f"Label distribution: {label_counts}")
+        if -1 in label_counts:
+            logging.warning(f"Found {label_counts[-1]} examples with invalid labels!")
     
     def __len__(self):
         return len(self.dataset)
@@ -147,6 +161,11 @@ def train_epoch(model, dataloader, optimizer, scheduler, device):
         hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
         labels = batch["label"].to(device)
         
+        # Check for invalid labels and skip batch if found
+        if torch.any(labels < 0) or torch.any(labels >= 3):
+            logging.warning(f"Invalid label detected in batch: {labels}. Skipping batch.")
+            continue
+        
         # Zero gradients
         optimizer.zero_grad()
         
@@ -158,26 +177,42 @@ def train_epoch(model, dataloader, optimizer, scheduler, device):
             hypothesis_attention_mask=hypothesis_attention_mask
         )
         
-        # Compute loss
-        loss = criterion(logits, labels)
+        # Ensure logits and labels have compatible shapes
+        if logits.shape[0] != labels.shape[0]:
+            logging.warning(f"Shape mismatch: logits {logits.shape}, labels {labels.shape}")
+            continue
         
-        # Backward pass
-        loss.backward()
-        
-        # Clip gradients
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-        
-        # Update weights
-        optimizer.step()
-        
-        # Update scheduler
-        scheduler.step()
-        
-        # Update loss
-        total_loss += loss.item()
-        
-        # Update progress bar
-        progress_bar.set_postfix({"loss": loss.item()})
+        try:
+            # Compute loss with error handling
+            loss = criterion(logits, labels)
+            
+            # Check for NaN loss
+            if torch.isnan(loss):
+                logging.warning("NaN loss detected. Skipping batch.")
+                continue
+                
+            # Backward pass
+            loss.backward()
+            
+            # Clip gradients
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            
+            # Update weights
+            optimizer.step()
+            
+            # Update scheduler
+            scheduler.step()
+            
+            # Update loss
+            total_loss += loss.item()
+            
+            # Update progress bar
+            progress_bar.set_postfix({"loss": loss.item()})
+        except RuntimeError as e:
+            logging.error(f"Error in batch: {e}")
+            # Print the actual label values for debugging
+            logging.error(f"Labels in batch: {labels.cpu().tolist()}")
+            continue
     
     return total_loss / len(dataloader)
 
@@ -206,6 +241,11 @@ def evaluate(model, dataloader, device):
             hypothesis_input_ids = batch["hypothesis_input_ids"].to(device)
             hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
             labels = batch["label"].to(device)
+            
+            # Skip batches with invalid labels
+            if torch.any(labels < 0) or torch.any(labels >= 3):
+                logging.warning(f"Invalid label detected during evaluation: {labels}. Skipping batch.")
+                continue
             
             # Forward pass
             logits = model(
@@ -284,6 +324,9 @@ def train(args):
     np.random.seed(args.seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(args.seed)
+        # Add this line for more debug info on CUDA errors
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
     
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.base_model)
