@@ -51,13 +51,24 @@ class NLIDataset:
             Processed batch
         """
         # Get premises and hypotheses
-        premises = [example["premise"] for example in examples]
-        hypotheses = [example["hypothesis"] for example in examples]
-        
-        # Get labels
+        premises = []
+        hypotheses = []
         labels = []
+        
         for example in examples:
-            label = example["label"]
+            # Handle both dict-like objects and Dataset objects
+            if hasattr(example, "get") and callable(example.get):
+                # Dict-like object
+                premises.append(example.get("premise", ""))
+                hypotheses.append(example.get("hypothesis", ""))
+                label = example.get("label", 1)  # Default to neutral if missing
+            else:
+                # Direct attribute access (like for datasets.Dataset)
+                premises.append(example.premise)
+                hypotheses.append(example.hypothesis)
+                label = example.label
+                
+            # Process the label
             if isinstance(label, str):
                 label_map = {"entailment": 0, "neutral": 1, "contradiction": 2}
                 labels.append(label_map.get(label, 1))  # Default to neutral if unknown
