@@ -60,7 +60,18 @@ class NLIDataset(Dataset):
     
     def _log_label_distribution(self):
         """Log the distribution of labels to help with debugging"""
-        labels = [self.label_map.get(item["label"], -1) for item in self.dataset]
+        labels = []
+        for item in self.dataset:
+            # Check if the label is already numeric
+            if isinstance(item["label"], int):
+                label = item["label"]
+            # Handle string labels
+            elif isinstance(item["label"], str):
+                label = self.label_map.get(item["label"].lower(), -1)
+            else:
+                label = -1
+            labels.append(label)
+        
         label_counts = {}
         for label in labels:
             label_counts[label] = label_counts.get(label, 0) + 1
@@ -68,6 +79,16 @@ class NLIDataset(Dataset):
         logging.info(f"Label distribution: {label_counts}")
         if -1 in label_counts:
             logging.warning(f"Found {label_counts[-1]} examples with invalid labels!")
+            # Print sample items with invalid labels
+            invalid_examples = []
+            count = 0
+            for item in self.dataset:
+                if count >= 5:  # Limit to 5 examples
+                    break
+                if isinstance(item["label"], str) and item["label"].lower() not in self.label_map:
+                    invalid_examples.append({"label": item["label"], "premise": item["premise"][:50]})
+                    count += 1
+            logging.warning(f"Sample invalid examples: {invalid_examples}")
     
     def __len__(self):
         return len(self.dataset)
@@ -78,7 +99,16 @@ class NLIDataset(Dataset):
         # Get premise, hypothesis and label
         premise = item["premise"]
         hypothesis = item["hypothesis"]
-        label = self.label_map.get(item["label"], -1)
+        
+        # Handle different label formats
+        if isinstance(item["label"], int) and 0 <= item["label"] <= 2:
+            # Already numeric and in the right range
+            label = item["label"]
+        elif isinstance(item["label"], str):
+            # Convert string label to numeric
+            label = self.label_map.get(item["label"].lower(), -1)
+        else:
+            label = -1
         
         # Tokenize premise
         premise_encoding = self.tokenizer(
@@ -339,19 +369,34 @@ def train(args):
         validation_dataset = dataset["validation"]
         test_lay_dataset = dataset["test_lay"]
         test_expert_dataset = dataset["test_expert"]
+        
+        # Log dataset structure to debug
+        logger.info(f"Dataset structure: {dataset}")
+        logger.info(f"Train dataset features: {train_dataset.features}")
+        logger.info(f"Sample example: {train_dataset[0]}")
+        
     except Exception as e:
         logger.error(f"Error loading dataset: {e}")
         # Try loading from local directories
-        dataset = load_dataset("json", data_files={
-            "train": "data/indonli/train.json",
-            "validation": "data/indonli/valid.json",
-            "test_lay": "data/indonli/test_lay.json",
-            "test_expert": "data/indonli/test_expert.json"
-        })
-        train_dataset = dataset["train"]
-        validation_dataset = dataset["validation"]
-        test_lay_dataset = dataset["test_lay"]
-        test_expert_dataset = dataset["test_expert"]
+        try:
+            dataset = load_dataset("json", data_files={
+                "train": "data/indonli/train.json",
+                "validation": "data/indonli/valid.json",
+                "test_lay": "data/indonli/test_lay.json",
+                "test_expert": "data/indonli/test_expert.json"
+            })
+            train_dataset = dataset["train"]
+            validation_dataset = dataset["validation"]
+            test_lay_dataset = dataset["test_lay"]
+            test_expert_dataset = dataset["test_expert"]
+            
+            # Log dataset structure to debug
+            logger.info(f"Local dataset features: {train_dataset.features}")
+            logger.info(f"Sample example: {train_dataset[0]}")
+            
+        except Exception as e2:
+            logger.error(f"Error loading local dataset: {e2}")
+            raise RuntimeError(f"Failed to load dataset from either HF or local: {e}, {e2}")
     
     # Create datasets
     train_dataset = NLIDataset(train_dataset, tokenizer, max_length=args.max_length)
