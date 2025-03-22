@@ -7,11 +7,13 @@ import torch
 import numpy as np
 from tqdm import tqdm
 from torch.optim import AdamW
-from torch.optim.lr_scheduler import get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup
 from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
+import pandas as pd
+import csv
 
 
 class Trainer:
@@ -61,6 +63,10 @@ class Trainer:
         
         # Create output directory if it doesn't exist
         os.makedirs(output_dir, exist_ok=True)
+        
+        # Create metrics directory
+        self.metrics_dir = os.path.join(output_dir, "metrics")
+        os.makedirs(self.metrics_dir, exist_ok=True)
         
         # Initialize optimizer and scheduler
         self.optimizer = self._init_optimizer()
@@ -134,7 +140,7 @@ class Trainer:
             self.history['train_loss'].append(train_loss)
             
             # Validation
-            val_metrics = self.evaluate('validation')
+            val_metrics = self.evaluate('validation', epoch + 1)
             self.history['val_loss'].append(val_metrics['loss'])
             self.history['val_accuracy'].append(val_metrics['accuracy'])
             self.history['val_f1'].append(val_metrics['f1'])
@@ -173,10 +179,10 @@ class Trainer:
             self.model.to(self.device)
         
         print("\nEvaluating on test_lay split:")
-        test_lay_metrics = self.evaluate('test_lay')
+        test_lay_metrics = self.evaluate('test_lay', "final")
         
         print("\nEvaluating on test_expert split:")
-        test_expert_metrics = self.evaluate('test_expert')
+        test_expert_metrics = self.evaluate('test_expert', "final")
         
         return {
             'history': self.history,
@@ -229,25 +235,27 @@ class Trainer:
         
         return total_loss / len(train_dataloader)
     
-    def evaluate(self, split):
+    def evaluate(self, split, epoch=""):
         """
         Evaluate the model on a specific data split.
         Public interface for _evaluate method.
         
         Args:
             split: Data split to evaluate on ('validation', 'test_lay', or 'test_expert')
+            epoch: Current epoch number or identifier
             
         Returns:
             Dictionary containing evaluation metrics
         """
-        return self._evaluate(split)
+        return self._evaluate(split, epoch)
     
-    def _evaluate(self, split):
+    def _evaluate(self, split, epoch=""):
         """
         Evaluate the model on a specific data split.
         
         Args:
             split: Data split to evaluate on ('validation', 'test_lay', or 'test_expert')
+            epoch: Current epoch number or identifier
             
         Returns:
             Dictionary containing evaluation metrics
@@ -285,20 +293,95 @@ class Trainer:
         accuracy = accuracy_score(all_labels, all_preds)
         f1 = f1_score(all_labels, all_preds, average='macro')
         
-        # Print classification report
+        # Generate classification report
         target_names = ['entailment', 'neutral', 'contradiction']
-        print(classification_report(all_labels, all_preds, target_names=target_names))
+        report = classification_report(all_labels, all_preds, target_names=target_names, output_dict=True)
+        report_text = classification_report(all_labels, all_preds, target_names=target_names)
+        
+        # Print the report to console
+        print(report_text)
+        
+        # Save the classification report to files
+        self._save_classification_report(report, report_text, split, epoch)
         
         # Plot confusion matrix
-        self._plot_confusion_matrix(all_labels, all_preds, split)
+        self._plot_confusion_matrix(all_labels, all_preds, split, epoch)
         
         return {
             'loss': total_loss / len(dataloader),
             'accuracy': accuracy,
             'f1': f1,
             'predictions': all_preds,
-            'labels': all_labels
+            'labels': all_labels,
+            'report': report
         }
+    
+    def _save_classification_report(self, report_dict, report_text, split, epoch):
+        """
+        Save classification report to text and CSV files.
+        
+        Args:
+            report_dict: Classification report as dictionary
+            report_text: Classification report as text
+            split: Data split name
+            epoch: Current epoch or identifier
+        """
+        epoch_str = f"epoch_{epoch}" if isinstance(epoch, int) else epoch
+        
+        # Save as text file
+        txt_path = os.path.join(self.metrics_dir, f"{split}_{epoch_str}_report.txt")
+        with open(txt_path, 'w') as f:
+            f.write(report_text)
+        
+        # Reshape the report dictionary for CSV
+        rows = []
+        for class_name, metrics in report_dict.items():
+            if isinstance(metrics, dict):  # Skip non-metric entries
+                row = {'class': class_name}
+                row.update(metrics)
+                rows.append(row)
+        
+        # Save as CSV file
+        csv_path = os.path.join(self.metrics_dir, f"{split}_{epoch_str}_report.csv")
+        with open(csv_path, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=['class', 'precision', 'recall', 'f1-score', 'support'])
+            writer.writeheader()
+            for row in rows:
+                writer.writerow({
+                    'class': row['class'],
+                    'precision': row['precision'],
+                    'recall': row['recall'],
+                    'f1-score': row['f1-score'],
+                    'support': row['support']
+                })
+        
+        print(f"Saved classification report to {txt_path} and {csv_path}")
+        
+        # Also save a cumulative CSV with epoch information for validation
+        if split == 'validation' and isinstance(epoch, int):
+            cumulative_csv_path = os.path.join(self.metrics_dir, "validation_metrics_by_epoch.csv")
+            
+            # Check if file exists to determine if we need a header
+            file_exists = os.path.isfile(cumulative_csv_path)
+            
+            with open(cumulative_csv_path, 'a', newline='') as f:
+                fieldnames = ['epoch', 'class', 'precision', 'recall', 'f1-score', 'support']
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                
+                if not file_exists:
+                    writer.writeheader()
+                
+                for row in rows:
+                    writer.writerow({
+                        'epoch': epoch,
+                        'class': row['class'],
+                        'precision': row['precision'],
+                        'recall': row['recall'],
+                        'f1-score': row['f1-score'],
+                        'support': row['support']
+                    })
+            
+            print(f"Updated cumulative metrics in {cumulative_csv_path}")
     
     def _plot_training_history(self):
         """
@@ -332,8 +415,18 @@ class Trainer:
         plt.tight_layout()
         plt.savefig(os.path.join(self.output_dir, 'training_history.png'))
         plt.close()
+        
+        # Save metrics as CSV
+        metrics_df = pd.DataFrame({
+            'epoch': range(1, len(self.history['train_loss']) + 1),
+            'train_loss': self.history['train_loss'],
+            'val_loss': self.history['val_loss'],
+            'val_accuracy': self.history['val_accuracy'],
+            'val_f1': self.history['val_f1']
+        })
+        metrics_df.to_csv(os.path.join(self.metrics_dir, 'training_metrics.csv'), index=False)
     
-    def _plot_confusion_matrix(self, labels, preds, split):
+    def _plot_confusion_matrix(self, labels, preds, split, epoch=""):
         """
         Plot confusion matrix.
         
@@ -341,6 +434,7 @@ class Trainer:
             labels: True labels
             preds: Predicted labels
             split: Data split name
+            epoch: Current epoch or identifier
         """
         cm = confusion_matrix(labels, preds)
         plt.figure(figsize=(10, 8))
@@ -354,7 +448,23 @@ class Trainer:
         )
         plt.xlabel('Predicted')
         plt.ylabel('True')
-        plt.title(f'Confusion Matrix - {split}')
+        
+        # Add epoch info to the title if provided
+        if epoch:
+            epoch_str = f"Epoch {epoch}" if isinstance(epoch, int) else epoch.capitalize()
+            title = f'Confusion Matrix - {split} ({epoch_str})'
+        else:
+            title = f'Confusion Matrix - {split}'
+            
+        plt.title(title)
         plt.tight_layout()
-        plt.savefig(os.path.join(self.output_dir, f'confusion_matrix_{split}.png'))
+        
+        # Create file name with epoch info if provided
+        if epoch:
+            epoch_str = f"epoch_{epoch}" if isinstance(epoch, int) else epoch
+            file_name = f'confusion_matrix_{split}_{epoch_str}.png'
+        else:
+            file_name = f'confusion_matrix_{split}.png'
+            
+        plt.savefig(os.path.join(self.metrics_dir, file_name))
         plt.close()
