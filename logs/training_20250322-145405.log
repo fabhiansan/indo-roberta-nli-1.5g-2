@@ -1,0 +1,46 @@
+2025-03-22 14:54:05,506 [INFO] Found 5 checkpoints
+2025-03-22 14:54:05,507 [INFO] Processing ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:54:05,507 [INFO] Loading model from ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:54:05,564 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:06,102 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-4
+2025-03-22 14:54:06,718 [ERROR] Failed to push ./outputs/checkpoint-epoch-4-20250322-144223: (Request ID: Root=1-67de6c9e-02a5205b6866f22066c6e66a;3ac3c529-5c60-41ba-99b2-dddd89305c9d)
+
+403 Forbidden: You don't have the rights to create a model under the namespace "fabhiansan".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.
+2025-03-22 14:54:06,739 [INFO] Processing ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:54:06,740 [INFO] Loading model from ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:54:06,816 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:07,227 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-2
+2025-03-22 14:54:08,018 [ERROR] Failed to push ./outputs/checkpoint-epoch-2-20250322-143948: (Request ID: Root=1-67de6c9f-42df7910422844ba1c5f887b;62f13429-1d43-442f-aa86-55fc51226731)
+
+403 Forbidden: You don't have the rights to create a model under the namespace "fabhiansan".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.
+2025-03-22 14:54:08,035 [INFO] Processing ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 14:54:08,036 [INFO] Loading model from ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 14:54:08,097 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:08,513 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-1
+2025-03-22 14:54:09,128 [ERROR] Failed to push ./outputs/checkpoint-epoch-1-20250322-143830: (Request ID: Root=1-67de6ca0-29369d8b47b0452a54211fcb;4a596005-3e3a-48ba-806c-625eeb0f79d8)
+
+403 Forbidden: You don't have the rights to create a model under the namespace "fabhiansan".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.
+2025-03-22 14:54:09,146 [INFO] Processing ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 14:54:09,147 [INFO] Loading model from ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 14:54:09,210 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:09,648 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-3
+2025-03-22 14:54:10,445 [ERROR] Failed to push ./outputs/checkpoint-epoch-3-20250322-144105: (Request ID: Root=1-67de6ca1-04a022947f9857f628d90570;ed0ee278-820b-4ffe-aacc-783e7a1172c6)
+
+403 Forbidden: You don't have the rights to create a model under the namespace "fabhiansan".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.
+2025-03-22 14:54:10,459 [INFO] Processing ./outputs/best_model
+2025-03-22 14:54:10,459 [INFO] Loading model from ./outputs/best_model
+2025-03-22 14:54:10,514 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:10,926 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-best_model
+2025-03-22 14:54:11,643 [ERROR] Failed to push ./outputs/best_model: (Request ID: Root=1-67de6ca3-177ec11d5044fb6405b3110d;e69d9c92-8d78-41d4-8994-eefb611ac651)
+
+403 Forbidden: You don't have the rights to create a model under the namespace "fabhiansan".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.

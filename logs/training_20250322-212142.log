@@ -1,0 +1,18 @@
+2025-03-22 21:21:42,007 [INFO] Loading model: firqaaa/indo-sentence-bert-base
+2025-03-22 21:21:42,008 [INFO] Use pytorch device_name: cuda
+2025-03-22 21:21:42,008 [INFO] Load pretrained SentenceTransformer: firqaaa/indo-sentence-bert-base
+2025-03-22 21:21:45,675 [INFO] Setting max sequence length to 256
+2025-03-22 21:21:45,676 [INFO] Loading data
+2025-03-22 21:21:50,486 [INFO] Loaded 10330 examples from train split
+2025-03-22 21:21:54,551 [INFO] Loaded 2197 examples from validation split
+2025-03-22 21:21:58,611 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 21:22:03,067 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 21:22:03,173 [INFO] Setting up CosineSimilarityLoss for training
+2025-03-22 21:22:03,173 [INFO] Starting training for 3 epochs
+2025-03-22 21:22:03,344 [WARNING] Currently using DataParallel (DP) for multi-gpu training, while DistributedDataParallel (DDP) is recommended for faster training. See https://sbert.net/docs/sentence_transformer/training/distributed.html for more information.
+2025-03-22 21:22:56,533 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:22:56,560 [WARNING] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:22:56,564 [WARNING] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:22:56,620 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:22:56,647 [WARNING] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:22:56,651 [WARNING] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/

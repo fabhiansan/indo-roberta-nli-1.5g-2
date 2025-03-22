@@ -1,0 +1,23 @@
+Checkpoint: indo-sbert-advanced
+Dataset Split: test_expert
+
+Overall Metrics:
+Accuracy: 0.3385
+F1 Score (Macro): 0.3302
+F1 Score (Weighted): 0.3320
+Precision (Macro): 0.3369
+Precision (Weighted): 0.3374
+Recall (Macro): 0.3352
+Recall (Weighted): 0.3385
+
+Per-Class Metrics:
+Entailment   Accuracy: 0.4726  Precision: 0.3450  Recall: 0.4726  F1: 0.3989
+Neutral      Accuracy: 0.2638  Precision: 0.3140  Recall: 0.2638  F1: 0.2867
+ContradictionAccuracy: 0.2693  Precision: 0.3516  Recall: 0.2693  F1: 0.3050
+
+Confusion Matrix:
+                 Predicted
+                 E     N     C
+Actual E       492   274   275
+       N       474   249   221
+       C       460   270   269

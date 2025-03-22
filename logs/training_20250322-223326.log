@@ -1,0 +1,62 @@
+2025-03-22 22:33:26,981 [INFO] Using device: cuda
+2025-03-22 22:33:26,982 [INFO] Processing classifier checkpoints from ./outputs/indo-sbert-nli-hf
+2025-03-22 22:33:26,982 [INFO] Found 4 classifier checkpoints to evaluate
+2025-03-22 22:33:26,982 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-1
+2025-03-22 22:33:26,982 [INFO] Model type: classifier
+2025-03-22 22:33:27,005 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-1/classifier.pt
+2025-03-22 22:33:33,521 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:33:37,511 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:33:37,512 [ERROR] Error evaluating checkpoint checkpoint-1: string indices must be integers
+2025-03-22 22:33:37,520 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-2
+2025-03-22 22:33:37,520 [INFO] Model type: classifier
+2025-03-22 22:33:37,536 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-2/classifier.pt
+2025-03-22 22:33:41,822 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:33:46,235 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:33:46,236 [ERROR] Error evaluating checkpoint checkpoint-2: string indices must be integers
+2025-03-22 22:33:46,252 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-3
+2025-03-22 22:33:46,253 [INFO] Model type: classifier
+2025-03-22 22:33:46,283 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-3/classifier.pt
+2025-03-22 22:33:50,509 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:33:54,424 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:33:54,424 [ERROR] Error evaluating checkpoint checkpoint-3: string indices must be integers
+2025-03-22 22:33:54,431 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/best
+2025-03-22 22:33:54,431 [INFO] Model type: classifier
+2025-03-22 22:33:54,451 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/best/classifier.pt
+2025-03-22 22:33:59,538 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:03,472 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:03,473 [ERROR] Error evaluating checkpoint best: string indices must be integers
+2025-03-22 22:34:03,484 [INFO] Classifier summary saved to ./evaluation_results/classifier_summary.txt
+2025-03-22 22:34:03,484 [INFO] Processing similarity checkpoints from ./outputs/indo-sbert-similarity
+2025-03-22 22:34:03,485 [INFO] Found 6 similarity checkpoints to evaluate
+2025-03-22 22:34:03,485 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-1
+2025-03-22 22:34:03,485 [INFO] Model type: similarity
+2025-03-22 22:34:07,631 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:11,533 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:11,534 [ERROR] Error evaluating checkpoint checkpoint-1: string indices must be integers
+2025-03-22 22:34:11,541 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-2
+2025-03-22 22:34:11,542 [INFO] Model type: similarity
+2025-03-22 22:34:21,158 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:25,808 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:25,808 [ERROR] Error evaluating checkpoint checkpoint-2: string indices must be integers
+2025-03-22 22:34:25,817 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-3
+2025-03-22 22:34:25,817 [INFO] Model type: similarity
+2025-03-22 22:34:30,214 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:35,449 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:35,450 [ERROR] Error evaluating checkpoint checkpoint-3: string indices must be integers
+2025-03-22 22:34:35,459 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-4
+2025-03-22 22:34:35,460 [INFO] Model type: similarity
+2025-03-22 22:34:39,816 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:43,932 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:43,932 [ERROR] Error evaluating checkpoint checkpoint-4: string indices must be integers
+2025-03-22 22:34:43,940 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-5
+2025-03-22 22:34:43,941 [INFO] Model type: similarity
+2025-03-22 22:34:48,875 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:34:52,800 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:34:52,801 [ERROR] Error evaluating checkpoint checkpoint-5: string indices must be integers
+2025-03-22 22:34:52,807 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/best
+2025-03-22 22:34:52,807 [INFO] Model type: similarity
+2025-03-22 22:34:58,537 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:35:02,342 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:35:02,342 [ERROR] Error evaluating checkpoint best: string indices must be integers
+2025-03-22 22:35:02,349 [INFO] Similarity summary saved to ./evaluation_results/similarity_summary.txt
+2025-03-22 22:35:02,350 [INFO] Finished evaluating all checkpoints

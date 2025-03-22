@@ -1,0 +1,36 @@
+Evaluation Report for Classifier Model: checkpoint-3
+================================================================================
+
+Test Lay Dataset:
+----------------------------------------
+Accuracy: 0.6215
+F1 Macro: 0.6197
+F1 Weighted: 0.6236
+
+Per-Class Accuracy:
+  entailment: 0.6200
+  neutral: 0.5755
+  contradiction: 0.6610
+
+Confusion Matrix:
+         entai   neutr   contr
+  entai     501     219      88
+  neutr     171     362      96
+  contr     160      99     505
+
+Test Expert Dataset:
+----------------------------------------
+Accuracy: 0.5137
+F1 Macro: 0.5119
+F1 Weighted: 0.5116
+
+Per-Class Accuracy:
+  entailment: 0.5696
+  neutral: 0.5667
+  contradiction: 0.4054
+
+Confusion Matrix:
+         entai   neutr   contr
+  entai     593     301     147
+  neutr     291     535     118
+  contr     359     235     405

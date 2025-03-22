@@ -1,0 +1,25 @@
+2025-03-22 22:00:41,501 [INFO] Using device: cuda
+2025-03-22 22:00:41,501 [INFO] Loading tokenizer: firqaaa/indo-sentence-bert-base
+2025-03-22 22:00:41,971 [INFO] Loading datasets
+2025-03-22 22:00:46,560 [INFO] Loaded 10330 examples from train split
+2025-03-22 22:00:52,619 [INFO] Loaded 2197 examples from validation split
+2025-03-22 22:00:56,401 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:01:00,109 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:01:00,111 [INFO] Loading model: firqaaa/indo-sentence-bert-base
+2025-03-22 22:01:02,412 [INFO] Starting training for 3 epochs
+2025-03-22 22:01:02,412 [INFO] Epoch 1/3
+2025-03-22 22:03:09,902 [INFO] Training loss: 0.9482
+2025-03-22 22:03:20,223 [INFO] Validation loss: 0.8829, accuracy: 0.5694
+2025-03-22 22:03:21,502 [INFO] New best validation accuracy: 0.5694
+2025-03-22 22:03:22,436 [INFO] Epoch 2/3
+2025-03-22 22:05:31,852 [INFO] Training loss: 0.7374
+2025-03-22 22:05:42,234 [INFO] Validation loss: 0.8081, accuracy: 0.6368
+2025-03-22 22:05:43,208 [INFO] New best validation accuracy: 0.6368
+2025-03-22 22:05:44,420 [INFO] Epoch 3/3
+2025-03-22 22:07:54,023 [INFO] Training loss: 0.5822
+2025-03-22 22:08:04,341 [INFO] Validation loss: 0.8371, accuracy: 0.6331
+2025-03-22 22:08:05,280 [INFO] Evaluating on test_lay split
+2025-03-22 22:08:15,565 [INFO] Test Lay loss: 0.8810, accuracy: 0.6215
+2025-03-22 22:08:15,565 [INFO] Evaluating on test_expert split
+2025-03-22 22:08:29,723 [INFO] Test Expert loss: 1.0823, accuracy: 0.5137
+2025-03-22 22:08:29,723 [INFO] Model saved to ./outputs/indo-sbert-nli-hf

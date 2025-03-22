@@ -1,0 +1,38 @@
+Evaluation Report for Similarity Model: checkpoint-3
+================================================================================
+
+Test Lay Dataset:
+----------------------------------------
+Accuracy: 0.5720
+F1 Macro: 0.5752
+F1 Weighted: 0.5803
+Pearson Correlation: 0.5460
+
+Per-Class Accuracy:
+  entailment: 0.5186
+  neutral: 0.6121
+  contradiction: 0.5955
+
+Confusion Matrix:
+         entai   neutr   contr
+  entai     419     339      50
+  neutr     123     385     121
+  contr     100     209     455
+
+Test Expert Dataset:
+----------------------------------------
+Accuracy: 0.4591
+F1 Macro: 0.4529
+F1 Weighted: 0.4524
+Pearson Correlation: 0.2989
+
+Per-Class Accuracy:
+  entailment: 0.4092
+  neutral: 0.6674
+  contradiction: 0.3143
+
+Confusion Matrix:
+         entai   neutr   contr
+  entai     426     538      77
+  neutr     184     630     130
+  contr     201     484     314

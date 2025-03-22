@@ -1,0 +1,63 @@
+2025-03-22 22:37:57,178 [INFO] Using device: cuda
+2025-03-22 22:37:57,178 [INFO] Processing classifier checkpoints from ./outputs/indo-sbert-nli-hf
+2025-03-22 22:37:57,179 [INFO] Found 4 classifier checkpoints to evaluate
+2025-03-22 22:37:57,179 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-1
+2025-03-22 22:37:57,179 [INFO] Model type: classifier
+2025-03-22 22:37:57,198 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-1/classifier.pt
+2025-03-22 22:38:08,833 [WARNING] Using the latest cached version of the module from /home/jupyter-23522029/.cache/huggingface/modules/datasets_modules/datasets/afaji--indonli/d34041bd1d1a555a4bcb4ffdb9fe904778da6f7c5343209fc1485dd68121cb62 (last modified on Sat Mar 22 13:19:31 2025) since it couldn't be found locally at afaji/indonli, or remotely on the Hugging Face Hub.
+2025-03-22 22:38:08,892 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:14,473 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:14,474 [ERROR] Error evaluating checkpoint checkpoint-1: 'str' object has no attribute 'premise'
+2025-03-22 22:38:14,482 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-2
+2025-03-22 22:38:14,482 [INFO] Model type: classifier
+2025-03-22 22:38:14,508 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-2/classifier.pt
+2025-03-22 22:38:19,203 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:23,031 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:23,032 [ERROR] Error evaluating checkpoint checkpoint-2: 'str' object has no attribute 'premise'
+2025-03-22 22:38:23,047 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-3
+2025-03-22 22:38:23,047 [INFO] Model type: classifier
+2025-03-22 22:38:23,072 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-3/classifier.pt
+2025-03-22 22:38:27,618 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:31,961 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:31,961 [ERROR] Error evaluating checkpoint checkpoint-3: 'str' object has no attribute 'premise'
+2025-03-22 22:38:31,968 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/best
+2025-03-22 22:38:31,968 [INFO] Model type: classifier
+2025-03-22 22:38:31,985 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/best/classifier.pt
+2025-03-22 22:38:36,304 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:40,241 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:40,241 [ERROR] Error evaluating checkpoint best: 'str' object has no attribute 'premise'
+2025-03-22 22:38:40,248 [INFO] Classifier summary saved to ./evaluation_results/classifier_summary.txt
+2025-03-22 22:38:40,249 [INFO] Processing similarity checkpoints from ./outputs/indo-sbert-similarity
+2025-03-22 22:38:40,249 [INFO] Found 6 similarity checkpoints to evaluate
+2025-03-22 22:38:40,249 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-1
+2025-03-22 22:38:40,249 [INFO] Model type: similarity
+2025-03-22 22:38:44,344 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:48,501 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:48,502 [ERROR] Error evaluating checkpoint checkpoint-1: 'str' object has no attribute 'premise'
+2025-03-22 22:38:48,514 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-2
+2025-03-22 22:38:48,515 [INFO] Model type: similarity
+2025-03-22 22:38:53,256 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:38:57,225 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:38:57,226 [ERROR] Error evaluating checkpoint checkpoint-2: 'str' object has no attribute 'premise'
+2025-03-22 22:38:57,233 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-3
+2025-03-22 22:38:57,233 [INFO] Model type: similarity
+2025-03-22 22:39:02,190 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:39:06,006 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:39:06,007 [ERROR] Error evaluating checkpoint checkpoint-3: 'str' object has no attribute 'premise'
+2025-03-22 22:39:06,014 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-4
+2025-03-22 22:39:06,014 [INFO] Model type: similarity
+2025-03-22 22:39:10,147 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:39:14,343 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:39:14,343 [ERROR] Error evaluating checkpoint checkpoint-4: 'str' object has no attribute 'premise'
+2025-03-22 22:39:14,350 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-5
+2025-03-22 22:39:14,350 [INFO] Model type: similarity
+2025-03-22 22:39:24,132 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:39:27,983 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:39:27,984 [ERROR] Error evaluating checkpoint checkpoint-5: 'str' object has no attribute 'premise'
+2025-03-22 22:39:27,991 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/best
+2025-03-22 22:39:27,991 [INFO] Model type: similarity
+2025-03-22 22:39:32,195 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:39:37,194 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:39:37,194 [ERROR] Error evaluating checkpoint best: 'str' object has no attribute 'premise'
+2025-03-22 22:39:37,200 [INFO] Similarity summary saved to ./evaluation_results/similarity_summary.txt
+2025-03-22 22:39:37,201 [INFO] Finished evaluating all checkpoints

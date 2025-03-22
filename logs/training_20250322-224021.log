@@ -1,0 +1,82 @@
+2025-03-22 22:40:21,360 [INFO] Using device: cuda
+2025-03-22 22:40:21,361 [INFO] Processing classifier checkpoints from ./outputs/indo-sbert-nli-hf
+2025-03-22 22:40:21,361 [INFO] Found 4 classifier checkpoints to evaluate
+2025-03-22 22:40:21,361 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-1
+2025-03-22 22:40:21,361 [INFO] Model type: classifier
+2025-03-22 22:40:21,393 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-1/classifier.pt
+2025-03-22 22:40:27,280 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:40:31,340 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:40:34,199 [INFO] Evaluating on test_lay split
+2025-03-22 22:40:44,159 [INFO] Evaluating on test_expert split
+2025-03-22 22:40:56,421 [INFO] Evaluation results saved to ./evaluation_results/classifier_checkpoint-1_eval.txt
+2025-03-22 22:40:56,440 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-2
+2025-03-22 22:40:56,440 [INFO] Model type: classifier
+2025-03-22 22:40:56,459 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-2/classifier.pt
+2025-03-22 22:41:00,598 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:41:04,639 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:41:07,505 [INFO] Evaluating on test_lay split
+2025-03-22 22:41:16,554 [INFO] Evaluating on test_expert split
+2025-03-22 22:41:28,855 [INFO] Evaluation results saved to ./evaluation_results/classifier_checkpoint-2_eval.txt
+2025-03-22 22:41:28,868 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/checkpoint-3
+2025-03-22 22:41:28,868 [INFO] Model type: classifier
+2025-03-22 22:41:28,887 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/checkpoint-3/classifier.pt
+2025-03-22 22:41:33,810 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:41:37,768 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:41:40,857 [INFO] Evaluating on test_lay split
+2025-03-22 22:41:49,954 [INFO] Evaluating on test_expert split
+2025-03-22 22:42:02,360 [INFO] Evaluation results saved to ./evaluation_results/classifier_checkpoint-3_eval.txt
+2025-03-22 22:42:02,377 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-nli-hf/best
+2025-03-22 22:42:02,377 [INFO] Model type: classifier
+2025-03-22 22:42:02,395 [INFO] Loading classifier from ./outputs/indo-sbert-nli-hf/best/classifier.pt
+2025-03-22 22:42:07,460 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:42:11,515 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:42:14,882 [INFO] Evaluating on test_lay split
+2025-03-22 22:42:24,043 [INFO] Evaluating on test_expert split
+2025-03-22 22:42:36,503 [INFO] Evaluation results saved to ./evaluation_results/classifier_best_eval.txt
+2025-03-22 22:42:36,522 [INFO] Classifier summary saved to ./evaluation_results/classifier_summary.txt
+2025-03-22 22:42:36,522 [INFO] Processing similarity checkpoints from ./outputs/indo-sbert-similarity
+2025-03-22 22:42:36,522 [INFO] Found 6 similarity checkpoints to evaluate
+2025-03-22 22:42:36,522 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-1
+2025-03-22 22:42:36,522 [INFO] Model type: similarity
+2025-03-22 22:42:41,375 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:42:45,638 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:42:49,007 [INFO] Evaluating on test_lay split
+2025-03-22 22:42:58,253 [INFO] Evaluating on test_expert split
+2025-03-22 22:43:10,796 [INFO] Evaluation results saved to ./evaluation_results/similarity_checkpoint-1_eval.txt
+2025-03-22 22:43:10,811 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-2
+2025-03-22 22:43:10,812 [INFO] Model type: similarity
+2025-03-22 22:43:14,911 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:43:18,937 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:43:22,183 [INFO] Evaluating on test_lay split
+2025-03-22 22:43:31,385 [INFO] Evaluating on test_expert split
+2025-03-22 22:43:43,945 [INFO] Evaluation results saved to ./evaluation_results/similarity_checkpoint-2_eval.txt
+2025-03-22 22:43:43,961 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-3
+2025-03-22 22:43:43,961 [INFO] Model type: similarity
+2025-03-22 22:43:48,147 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:43:52,168 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:43:55,318 [INFO] Evaluating on test_lay split
+2025-03-22 22:44:04,536 [INFO] Evaluating on test_expert split
+2025-03-22 22:44:17,110 [INFO] Evaluation results saved to ./evaluation_results/similarity_checkpoint-3_eval.txt
+2025-03-22 22:44:17,126 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-4
+2025-03-22 22:44:17,126 [INFO] Model type: similarity
+2025-03-22 22:44:21,922 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:44:27,275 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:44:30,333 [INFO] Evaluating on test_lay split
+2025-03-22 22:44:39,560 [INFO] Evaluating on test_expert split
+2025-03-22 22:44:52,139 [INFO] Evaluation results saved to ./evaluation_results/similarity_checkpoint-4_eval.txt
+2025-03-22 22:44:52,157 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/checkpoint-5
+2025-03-22 22:44:52,157 [INFO] Model type: similarity
+2025-03-22 22:44:56,948 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:45:01,034 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:45:04,175 [INFO] Evaluating on test_lay split
+2025-03-22 22:45:13,387 [INFO] Evaluating on test_expert split
+2025-03-22 22:45:26,048 [INFO] Evaluation results saved to ./evaluation_results/similarity_checkpoint-5_eval.txt
+2025-03-22 22:45:26,064 [INFO] Evaluating checkpoint: ./outputs/indo-sbert-similarity/best
+2025-03-22 22:45:26,065 [INFO] Model type: similarity
+2025-03-22 22:45:31,201 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 22:45:37,636 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 22:45:40,701 [INFO] Evaluating on test_lay split
+2025-03-22 22:45:49,924 [INFO] Evaluating on test_expert split
+2025-03-22 22:46:02,493 [INFO] Evaluation results saved to ./evaluation_results/similarity_best_eval.txt
+2025-03-22 22:46:02,510 [INFO] Similarity summary saved to ./evaluation_results/similarity_summary.txt
+2025-03-22 22:46:02,510 [INFO] Finished evaluating all checkpoints

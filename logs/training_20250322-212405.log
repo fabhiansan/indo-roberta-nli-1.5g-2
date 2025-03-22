@@ -1,0 +1,54 @@
+2025-03-22 21:24:05,403 [INFO] Loading model: firqaaa/indo-sentence-bert-base
+2025-03-22 21:24:05,403 [INFO] Use pytorch device_name: cuda
+2025-03-22 21:24:05,403 [INFO] Load pretrained SentenceTransformer: firqaaa/indo-sentence-bert-base
+2025-03-22 21:24:08,916 [INFO] Setting max sequence length to 256
+2025-03-22 21:24:08,916 [INFO] Loading data
+2025-03-22 21:24:13,297 [INFO] Loaded 10330 examples from train split
+2025-03-22 21:24:17,684 [INFO] Loaded 2197 examples from validation split
+2025-03-22 21:24:21,639 [INFO] Loaded 2201 examples from test_lay split
+2025-03-22 21:24:32,412 [INFO] Loaded 2984 examples from test_expert split
+2025-03-22 21:24:32,540 [INFO] Setting up CosineSimilarityLoss for training
+2025-03-22 21:24:32,540 [INFO] Starting training for 3 epochs
+2025-03-22 21:24:32,770 [WARNING] Currently using DataParallel (DP) for multi-gpu training, while DistributedDataParallel (DDP) is recommended for faster training. See https://sbert.net/docs/sentence_transformer/training/distributed.html for more information.
+2025-03-22 21:27:38,440 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-validation dataset after epoch 1.0:
+2025-03-22 21:27:41,880 [INFO] Cosine-Similarity :	Pearson: 0.6000	Spearman: 0.5782
+2025-03-22 21:27:41,881 [INFO] Manhattan-Distance:	Pearson: 0.5941	Spearman: 0.5740
+2025-03-22 21:27:41,881 [INFO] Euclidean-Distance:	Pearson: 0.5950	Spearman: 0.5753
+2025-03-22 21:27:41,881 [INFO] Dot-Product-Similarity:	Pearson: 0.5983	Spearman: 0.5784
+2025-03-22 21:27:41,883 [INFO] Save model to ./outputs/indo-sbert-nli
+2025-03-22 21:30:28,444 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-validation dataset after epoch 2.0:
+2025-03-22 21:30:31,911 [INFO] Cosine-Similarity :	Pearson: 0.5952	Spearman: 0.5726
+2025-03-22 21:30:31,912 [INFO] Manhattan-Distance:	Pearson: 0.5877	Spearman: 0.5690
+2025-03-22 21:30:31,912 [INFO] Euclidean-Distance:	Pearson: 0.5888	Spearman: 0.5702
+2025-03-22 21:30:31,912 [INFO] Dot-Product-Similarity:	Pearson: 0.5917	Spearman: 0.5727
+2025-03-22 21:33:18,995 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-validation dataset after epoch 3.0:
+2025-03-22 21:33:22,253 [INFO] Cosine-Similarity :	Pearson: 0.5879	Spearman: 0.5694
+2025-03-22 21:33:22,253 [INFO] Manhattan-Distance:	Pearson: 0.5842	Spearman: 0.5679
+2025-03-22 21:33:22,254 [INFO] Euclidean-Distance:	Pearson: 0.5857	Spearman: 0.5695
+2025-03-22 21:33:22,254 [INFO] Dot-Product-Similarity:	Pearson: 0.5850	Spearman: 0.5692
+2025-03-22 21:33:22,258 [INFO] Evaluating on test_lay split
+2025-03-22 21:33:22,259 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-test-lay dataset:
+2025-03-22 21:33:25,868 [INFO] Cosine-Similarity :	Pearson: 0.5398	Spearman: 0.5186
+2025-03-22 21:33:25,868 [INFO] Manhattan-Distance:	Pearson: 0.5385	Spearman: 0.5228
+2025-03-22 21:33:25,868 [INFO] Euclidean-Distance:	Pearson: 0.5386	Spearman: 0.5229
+2025-03-22 21:33:25,869 [INFO] Dot-Product-Similarity:	Pearson: 0.5288	Spearman: 0.5101
+2025-03-22 21:33:25,869 [INFO] Test Lay Score: {'indonli-test-lay_pearson_cosine': 0.5397950758124563, 'indonli-test-lay_spearman_cosine': 0.5185749131164701, 'indonli-test-lay_pearson_manhattan': 0.5384898666563889, 'indonli-test-lay_spearman_manhattan': 0.5227910775173272, 'indonli-test-lay_pearson_euclidean': 0.5385991763092726, 'indonli-test-lay_spearman_euclidean': 0.5229347158658769, 'indonli-test-lay_pearson_dot': 0.5287614248698612, 'indonli-test-lay_spearman_dot': 0.510050624866487, 'indonli-test-lay_pearson_max': 0.5397950758124563, 'indonli-test-lay_spearman_max': 0.5229347158658769}
+2025-03-22 21:33:25,870 [INFO] Evaluating on test_expert split
+2025-03-22 21:33:25,871 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-test-expert dataset:
+2025-03-22 21:33:31,188 [INFO] Cosine-Similarity :	Pearson: 0.3036	Spearman: 0.2977
+2025-03-22 21:33:31,188 [INFO] Manhattan-Distance:	Pearson: 0.2788	Spearman: 0.2897
+2025-03-22 21:33:31,189 [INFO] Euclidean-Distance:	Pearson: 0.2800	Spearman: 0.2905
+2025-03-22 21:33:31,189 [INFO] Dot-Product-Similarity:	Pearson: 0.3124	Spearman: 0.3062
+2025-03-22 21:33:31,190 [INFO] Test Expert Score: {'indonli-test-expert_pearson_cosine': 0.3035600514099447, 'indonli-test-expert_spearman_cosine': 0.29774115902344195, 'indonli-test-expert_pearson_manhattan': 0.27877758252401585, 'indonli-test-expert_spearman_manhattan': 0.2897373261097337, 'indonli-test-expert_pearson_euclidean': 0.27998429397813057, 'indonli-test-expert_spearman_euclidean': 0.2904893779125323, 'indonli-test-expert_pearson_dot': 0.31237333786046073, 'indonli-test-expert_spearman_dot': 0.30620904964933954, 'indonli-test-expert_pearson_max': 0.31237333786046073, 'indonli-test-expert_spearman_max': 0.30620904964933954}
+2025-03-22 21:33:31,190 [INFO] EmbeddingSimilarityEvaluator: Evaluating the model on the indonli-validation dataset:
+2025-03-22 21:33:34,562 [INFO] Cosine-Similarity :	Pearson: 0.5879	Spearman: 0.5694
+2025-03-22 21:33:34,562 [INFO] Manhattan-Distance:	Pearson: 0.5842	Spearman: 0.5679
+2025-03-22 21:33:34,562 [INFO] Euclidean-Distance:	Pearson: 0.5857	Spearman: 0.5695
+2025-03-22 21:33:34,562 [INFO] Dot-Product-Similarity:	Pearson: 0.5850	Spearman: 0.5692
+2025-03-22 21:33:34,563 [INFO] Model saved to ./outputs/indo-sbert-nli
+2025-03-22 21:33:45,349 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:33:45,378 [WARNING] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:33:45,382 [WARNING] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:33:45,416 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:33:45,440 [WARNING] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/
+2025-03-22 21:33:45,468 [WARNING] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'OSError('Tunnel connection failed: 407 Proxy Authentication Required')': /api/4504800232407040/envelope/

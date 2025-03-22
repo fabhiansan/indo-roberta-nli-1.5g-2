@@ -1,0 +1,23 @@
+Checkpoint: checkpoint-1000
+Dataset Split: test_expert
+
+Overall Metrics:
+Accuracy: 0.3274
+F1 Score (Macro): 0.3176
+F1 Score (Weighted): 0.3156
+Precision (Macro): 0.3327
+Precision (Weighted): 0.3332
+Recall (Macro): 0.3325
+Recall (Weighted): 0.3274
+
+Per-Class Metrics:
+Entailment   Accuracy: 0.2200  Precision: 0.3491  Recall: 0.2200  F1: 0.2699
+Neutral      Accuracy: 0.5201  Precision: 0.3151  Recall: 0.5201  F1: 0.3925
+ContradictionAccuracy: 0.2573  Precision: 0.3338  Recall: 0.2573  F1: 0.2906
+
+Confusion Matrix:
+                 Predicted
+                 E     N     C
+Actual E       229   551   261
+       N       201   491   252
+       C       226   516   257

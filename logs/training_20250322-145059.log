@@ -1,0 +1,16 @@
+2025-03-22 14:50:59,376 [INFO] Found 5 checkpoints
+2025-03-22 14:50:59,376 [INFO] Processing ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:50:59,376 [INFO] Loading model and tokenizer from ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:50:59,437 [ERROR] Failed to push ./outputs/checkpoint-epoch-4-20250322-144223: Can't load tokenizer for './outputs/checkpoint-epoch-4-20250322-144223'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './outputs/checkpoint-epoch-4-20250322-144223' is the correct path to a directory containing all relevant files for a RobertaTokenizer tokenizer.
+2025-03-22 14:50:59,439 [INFO] Processing ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:50:59,439 [INFO] Loading model and tokenizer from ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:50:59,493 [ERROR] Failed to push ./outputs/checkpoint-epoch-2-20250322-143948: Can't load tokenizer for './outputs/checkpoint-epoch-2-20250322-143948'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './outputs/checkpoint-epoch-2-20250322-143948' is the correct path to a directory containing all relevant files for a RobertaTokenizer tokenizer.
+2025-03-22 14:50:59,493 [INFO] Processing ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 14:50:59,493 [INFO] Loading model and tokenizer from ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 14:50:59,548 [ERROR] Failed to push ./outputs/checkpoint-epoch-1-20250322-143830: Can't load tokenizer for './outputs/checkpoint-epoch-1-20250322-143830'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './outputs/checkpoint-epoch-1-20250322-143830' is the correct path to a directory containing all relevant files for a RobertaTokenizer tokenizer.
+2025-03-22 14:50:59,549 [INFO] Processing ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 14:50:59,549 [INFO] Loading model and tokenizer from ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 14:50:59,604 [ERROR] Failed to push ./outputs/checkpoint-epoch-3-20250322-144105: Can't load tokenizer for './outputs/checkpoint-epoch-3-20250322-144105'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './outputs/checkpoint-epoch-3-20250322-144105' is the correct path to a directory containing all relevant files for a RobertaTokenizer tokenizer.
+2025-03-22 14:50:59,605 [INFO] Processing ./outputs/best_model
+2025-03-22 14:50:59,605 [INFO] Loading model and tokenizer from ./outputs/best_model
+2025-03-22 14:50:59,661 [ERROR] Failed to push ./outputs/best_model: Can't load tokenizer for './outputs/best_model'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './outputs/best_model' is the correct path to a directory containing all relevant files for a RobertaTokenizer tokenizer.

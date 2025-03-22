@@ -1,0 +1,26 @@
+2025-03-22 14:54:41,198 [INFO] Found 5 checkpoints
+2025-03-22 14:54:41,198 [INFO] Processing ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:54:41,198 [INFO] Loading model from ./outputs/checkpoint-epoch-4-20250322-144223
+2025-03-22 14:54:41,256 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:54:41,761 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-4
+2025-03-22 14:57:37,672 [INFO] Successfully pushed to https://huggingface.co/fabhiansan/indo-roberta-1.5g-nli-epoch-4
+2025-03-22 14:57:37,708 [INFO] Processing ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:57:37,708 [INFO] Loading model from ./outputs/checkpoint-epoch-2-20250322-143948
+2025-03-22 14:57:37,778 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:57:38,187 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-2
+2025-03-22 15:00:33,956 [INFO] Successfully pushed to https://huggingface.co/fabhiansan/indo-roberta-1.5g-nli-epoch-2
+2025-03-22 15:00:34,005 [INFO] Processing ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 15:00:34,006 [INFO] Loading model from ./outputs/checkpoint-epoch-1-20250322-143830
+2025-03-22 15:00:34,063 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 15:00:34,670 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-1
+2025-03-22 15:03:26,267 [INFO] Successfully pushed to https://huggingface.co/fabhiansan/indo-roberta-1.5g-nli-epoch-1
+2025-03-22 15:03:26,336 [INFO] Processing ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 15:03:26,337 [INFO] Loading model from ./outputs/checkpoint-epoch-3-20250322-144105
+2025-03-22 15:03:26,400 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 15:03:26,822 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-epoch-3
+2025-03-22 15:06:55,508 [INFO] Successfully pushed to https://huggingface.co/fabhiansan/indo-roberta-1.5g-nli-epoch-3
+2025-03-22 15:06:55,563 [INFO] Processing ./outputs/best_model
+2025-03-22 15:06:55,564 [INFO] Loading model from ./outputs/best_model
+2025-03-22 15:06:55,622 [INFO] Loading tokenizer from cahya/roberta-base-indonesian-1.5G
+2025-03-22 15:06:56,040 [INFO] Pushing to Hub as fabhiansan/indo-roberta-1.5g-nli-best_model
+2025-03-22 15:09:49,549 [INFO] Successfully pushed to https://huggingface.co/fabhiansan/indo-roberta-1.5g-nli-best_model

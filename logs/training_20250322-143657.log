@@ -1,0 +1,8 @@
+2025-03-22 14:36:57,646 [INFO] Starting Indonesian NLI training with RoBERTa (cahya/roberta-base-indonesian-1.5G)
+2025-03-22 14:36:58,107 [INFO] Using device: cuda
+2025-03-22 14:36:58,107 [INFO] Loading and preprocessing data...
+2025-03-22 14:37:14,993 [INFO] Initializing model: cahya/roberta-base-indonesian-1.5G
+2025-03-22 14:37:15,929 [INFO] Model size: 125,980,419 trainable parameters
+2025-03-22 14:37:16,916 [INFO] Starting training...
+2025-03-22 14:42:38,258 [INFO] Training completed in 321.34 seconds
+2025-03-22 14:42:38,259 [INFO] Done!
