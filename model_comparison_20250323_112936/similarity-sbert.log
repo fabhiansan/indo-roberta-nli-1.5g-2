@@ -1,0 +1,62 @@
+2025-03-23 11:46:58.354419: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-03-23 11:46:58.356948: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-23 11:46:58.410625: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-23 11:46:59.204887: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO - Initialized NLI logger for model: similarity-sbert
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO - Hyperparameters:
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO -   model_name: firqaaa/indo-sentence-bert-base
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO -   output_path: ./model_comparison_20250323_112936/similarity
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO -   batch_size: 16
+2025-03-23 11:47:03,412 - nli_logger_similarity-sbert - INFO -   num_epochs: 5
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO -   max_seq_length: 128
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO -   warmup_steps: 0
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO -   seed: 42
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO -   use_new_logger: True
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO - Starting training of similarity-based SBERT model
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO - Using device: cuda
+2025-03-23 11:47:03,413 - nli_logger_similarity-sbert - INFO - Loading IndoNLI dataset from Hugging Face
+2025-03-23 11:47:28,980 - nli_logger_similarity-sbert - INFO - Dataset statistics:
+2025-03-23 11:47:28,980 - nli_logger_similarity-sbert - INFO -   train: 10330 examples
+2025-03-23 11:47:29,384 - nli_logger_similarity-sbert - INFO -     contradiction: 3439 examples (33.3%)
+2025-03-23 11:47:29,384 - nli_logger_similarity-sbert - INFO -     entailment: 3476 examples (33.6%)
+2025-03-23 11:47:29,384 - nli_logger_similarity-sbert - INFO -     neutral: 3415 examples (33.1%)
+2025-03-23 11:47:29,384 - nli_logger_similarity-sbert - INFO -   validation: 2197 examples
+2025-03-23 11:47:29,470 - nli_logger_similarity-sbert - INFO -     contradiction: 749 examples (34.1%)
+2025-03-23 11:47:29,470 - nli_logger_similarity-sbert - INFO -     neutral: 641 examples (29.2%)
+2025-03-23 11:47:29,470 - nli_logger_similarity-sbert - INFO -     entailment: 807 examples (36.7%)
+2025-03-23 11:47:29,470 - nli_logger_similarity-sbert - INFO -   test_lay: 2201 examples
+2025-03-23 11:47:29,556 - nli_logger_similarity-sbert - INFO -     neutral: 629 examples (28.6%)
+2025-03-23 11:47:29,556 - nli_logger_similarity-sbert - INFO -     entailment: 808 examples (36.7%)
+2025-03-23 11:47:29,556 - nli_logger_similarity-sbert - INFO -     contradiction: 764 examples (34.7%)
+2025-03-23 11:47:29,556 - nli_logger_similarity-sbert - INFO -   test_expert: 2984 examples
+2025-03-23 11:47:29,676 - nli_logger_similarity-sbert - INFO -     contradiction: 999 examples (33.5%)
+2025-03-23 11:47:29,676 - nli_logger_similarity-sbert - INFO -     entailment: 1041 examples (34.9%)
+2025-03-23 11:47:29,676 - nli_logger_similarity-sbert - INFO -     neutral: 944 examples (31.6%)
+2025-03-23 11:47:29,677 - nli_logger_similarity-sbert - INFO - Converting dataset to SBERT examples
+2025-03-23 11:47:29,677 - nli_logger_similarity-sbert - INFO - Using label mapping: {'entailment': 1.0, 'neutral': 0.5, 'contradiction': 0.0}
+2025-03-23 11:47:30,342 - nli_logger_similarity-sbert - INFO - Created 0 training examples
+2025-03-23 11:47:30,343 - nli_logger_similarity-sbert - INFO - Created 0 validation examples
+2025-03-23 11:47:30,343 - nli_logger_similarity-sbert - INFO - Created 0 test_lay examples
+2025-03-23 11:47:30,343 - nli_logger_similarity-sbert - INFO - Created 0 test_expert examples
+2025-03-23 11:47:30,343 - nli_logger_similarity-sbert - INFO - Creating model from firqaaa/indo-sentence-bert-base
+/home/jupyter-23522029/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+2025-03-23 11:47:31,774 - nli_logger_similarity-sbert - INFO - Creating evaluator
+2025-03-23 11:47:31,775 - nli_logger_similarity-sbert - ERROR - An error occurred during training: num_samples should be a positive integer value, but got num_samples=0
+2025-03-23 11:47:31,775 - nli_logger_similarity-sbert - ERROR - An error occurred during training: num_samples should be a positive integer value, but got num_samples=0
+Random seed set to 42
+Random seed set to 42
+Traceback (most recent call last):
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/sbert_train.py", line 660, in <module>
+    main()
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/sbert_train.py", line 626, in main
+    train_sbert_with_logger(
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/sbert_train.py", line 381, in train_sbert_with_logger
+    train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=batch_size)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 351, in __init__
+    sampler = RandomSampler(dataset, generator=generator)  # type: ignore[arg-type]
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/torch/utils/data/sampler.py", line 144, in __init__
+    raise ValueError(f"num_samples should be a positive integer value, but got num_samples={self.num_samples}")
+ValueError: num_samples should be a positive integer value, but got num_samples=0

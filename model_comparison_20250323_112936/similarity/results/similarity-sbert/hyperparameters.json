@@ -1,0 +1,11 @@
+{
+  "model_name": "firqaaa/indo-sentence-bert-base",
+  "output_path": "./model_comparison_20250323_112936/similarity",
+  "batch_size": 16,
+  "num_epochs": 5,
+  "learning_rate": 2e-05,
+  "max_seq_length": 128,
+  "warmup_steps": 0,
+  "seed": 42,
+  "use_new_logger": true
+}

@@ -1,0 +1,89 @@
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO - Initialized NLI logger for model: advanced-sbert
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO - Hyperparameters:
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   base_model: firqaaa/indo-sentence-bert-base
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   pooling_mode: mean_pooling
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   classifier_hidden_sizes: 512,256
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   dropout: 0.2
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   use_cross_attention: False
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   batch_size: 16
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   num_epochs: 5
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   weight_decay: 0.01
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   adam_epsilon: 1e-08
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   max_grad_norm: 1.0
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   max_length: 128
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   warmup_ratio: 0.06
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   output_dir: ./model_comparison_20250323_112936/advanced
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   seed: 42
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   use_new_logger: True
+2025-03-23 11:47:38,349 - nli_logger_advanced-sbert - INFO - Using device: cuda
+/home/jupyter-23522029/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+2025-03-23 11:47:38,743 - nli_logger_advanced-sbert - INFO - Loaded tokenizer from firqaaa/indo-sentence-bert-base
+Random seed set to 42
+Traceback (most recent call last):
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/tljh/user/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/opt/tljh/user/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/tljh/user/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/opt/tljh/user/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/opt/tljh/user/lib/python3.10/ssl.py", line 1307, in recv_into
+    return self.read(nbytes, buffer)
+  File "/opt/tljh/user/lib/python3.10/ssl.py", line 1163, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connectionpool.py", line 538, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/opt/tljh/user/lib/python3.10/site-packages/urllib3/connectionpool.py", line 369, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/indo_sbert_advanced_train.py", line 712, in <module>
+    main()
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/indo_sbert_advanced_train.py", line 689, in main
+    train_with_nli_logger(args, logger)
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/indo_sbert_advanced_train.py", line 208, in train_with_nli_logger
+    model = SBERTAdvancedModel(
+  File "/home/jupyter-23522029/indo-roberta-nli-1.5g-2/indo_sbert_advanced_model.py", line 262, in __init__
+    self.bert = AutoModel.from_pretrained(model_name)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3594, in from_pretrained
+    if not has_file(pretrained_model_name_or_path, safe_weights_name, **has_file_kwargs):
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 655, in has_file
+    response = get_session().head(
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/requests/sessions.py", line 624, in head
+    return self.request("HEAD", url, **kwargs)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 93, in send
+    return super().send(request, *args, **kwargs)
+  File "/home/jupyter-23522029/.local/lib/python3.10/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: efd60585-3dc6-451d-8796-e873a5a3e244)')

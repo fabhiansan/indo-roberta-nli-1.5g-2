@@ -1,0 +1,3 @@
+usage: train_improved_sbert.py [-h] [--base_model BASE_MODEL] [--pooling_mode {mean_pooling,max_pooling,cls}] [--classifier_hidden_size CLASSIFIER_HIDDEN_SIZE] [--dropout DROPOUT] [--use_cross_attention] [--output_dir OUTPUT_DIR] [--max_length MAX_LENGTH] [--batch_size BATCH_SIZE]
+                               [--learning_rate LEARNING_RATE] [--weight_decay WEIGHT_DECAY] [--adam_epsilon ADAM_EPSILON] [--num_epochs NUM_EPOCHS] [--warmup_ratio WARMUP_RATIO] [--patience PATIENCE] [--seed SEED] [--num_workers NUM_WORKERS] [--use_new_logger]
+train_improved_sbert.py: error: unrecognized arguments: --max_seq_length 128

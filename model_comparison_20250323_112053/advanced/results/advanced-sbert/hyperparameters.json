@@ -1,0 +1,18 @@
+{
+  "base_model": "firqaaa/indo-sentence-bert-base",
+  "pooling_mode": "mean_pooling",
+  "classifier_hidden_sizes": "512,256",
+  "dropout": 0.2,
+  "use_cross_attention": false,
+  "batch_size": 16,
+  "num_epochs": 5,
+  "learning_rate": 2e-05,
+  "weight_decay": 0.01,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 1.0,
+  "max_length": 128,
+  "warmup_ratio": 0.06,
+  "output_dir": "./model_comparison_20250323_112053/advanced",
+  "seed": 42,
+  "use_new_logger": true
+}

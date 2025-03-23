@@ -1,0 +1,33 @@
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO - Initialized NLI logger for model: classifier-sbert
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO - Hyperparameters:
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO -   base_model: firqaaa/indo-sentence-bert-base
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO -   batch_size: 16
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO -   num_epochs: 5
+2025-03-23 11:20:58,109 - nli_logger_classifier-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   weight_decay: 0.01
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   max_length: 128
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   warmup_ratio: 0.06
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   output_dir: ./model_comparison_20250323_112053/classifier
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   seed: 42
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO -   use_new_logger: True
+2025-03-23 11:20:58,110 - nli_logger_classifier-sbert - INFO - Starting training of classifier-based SBERT model
+2025-03-23 11:20:58,198 - nli_logger_classifier-sbert - INFO - Using device: cuda
+2025-03-23 11:21:00,476 - nli_logger_classifier-sbert - INFO - Loading dataset...
+2025-03-23 11:21:07,105 - nli_logger_classifier-sbert - INFO - Dataset statistics:
+2025-03-23 11:21:07,105 - nli_logger_classifier-sbert - INFO -   train: 10330 examples
+2025-03-23 11:21:07,485 - nli_logger_classifier-sbert - INFO -     contradiction: 3439 examples (33.3%)
+2025-03-23 11:21:07,485 - nli_logger_classifier-sbert - INFO -     entailment: 3476 examples (33.6%)
+2025-03-23 11:21:07,485 - nli_logger_classifier-sbert - INFO -     neutral: 3415 examples (33.1%)
+2025-03-23 11:21:07,485 - nli_logger_classifier-sbert - INFO -   validation: 2197 examples
+2025-03-23 11:21:07,566 - nli_logger_classifier-sbert - INFO -     contradiction: 749 examples (34.1%)
+2025-03-23 11:21:07,566 - nli_logger_classifier-sbert - INFO -     neutral: 641 examples (29.2%)
+2025-03-23 11:21:07,566 - nli_logger_classifier-sbert - INFO -     entailment: 807 examples (36.7%)
+2025-03-23 11:21:07,566 - nli_logger_classifier-sbert - INFO -   test_lay: 2201 examples
+2025-03-23 11:21:07,659 - nli_logger_classifier-sbert - INFO -     neutral: 629 examples (28.6%)
+2025-03-23 11:21:07,659 - nli_logger_classifier-sbert - INFO -     entailment: 808 examples (36.7%)
+2025-03-23 11:21:07,659 - nli_logger_classifier-sbert - INFO -     contradiction: 764 examples (34.7%)
+2025-03-23 11:21:07,659 - nli_logger_classifier-sbert - INFO -   test_expert: 2984 examples
+2025-03-23 11:21:07,764 - nli_logger_classifier-sbert - INFO -     contradiction: 999 examples (33.5%)
+2025-03-23 11:21:07,764 - nli_logger_classifier-sbert - INFO -     entailment: 1041 examples (34.9%)
+2025-03-23 11:21:07,764 - nli_logger_classifier-sbert - INFO -     neutral: 944 examples (31.6%)
+2025-03-23 11:21:08,325 - nli_logger_classifier-sbert - INFO - Starting training loop

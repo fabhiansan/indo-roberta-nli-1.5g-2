@@ -1,0 +1,41 @@
+2025-03-23 11:21:18,080 - nli_logger_similarity-sbert - INFO - Initialized NLI logger for model: similarity-sbert
+2025-03-23 11:21:18,080 - nli_logger_similarity-sbert - INFO - Hyperparameters:
+2025-03-23 11:21:18,080 - nli_logger_similarity-sbert - INFO -   model_name: firqaaa/indo-sentence-bert-base
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   output_path: ./model_comparison_20250323_112053/similarity
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   batch_size: 16
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   num_epochs: 5
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   max_seq_length: 128
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   warmup_steps: 0
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   seed: 42
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO -   use_new_logger: True
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO - Starting training of similarity-based SBERT model
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO - Using device: cuda
+2025-03-23 11:21:18,081 - nli_logger_similarity-sbert - INFO - Loading IndoNLI dataset from Hugging Face
+2025-03-23 11:21:44,715 - nli_logger_similarity-sbert - INFO - Dataset statistics:
+2025-03-23 11:21:44,715 - nli_logger_similarity-sbert - INFO -   train: 10330 examples
+2025-03-23 11:21:45,029 - nli_logger_similarity-sbert - INFO -     contradiction: 3439 examples (33.3%)
+2025-03-23 11:21:45,029 - nli_logger_similarity-sbert - INFO -     entailment: 3476 examples (33.6%)
+2025-03-23 11:21:45,029 - nli_logger_similarity-sbert - INFO -     neutral: 3415 examples (33.1%)
+2025-03-23 11:21:45,030 - nli_logger_similarity-sbert - INFO -   validation: 2197 examples
+2025-03-23 11:21:45,094 - nli_logger_similarity-sbert - INFO -     contradiction: 749 examples (34.1%)
+2025-03-23 11:21:45,094 - nli_logger_similarity-sbert - INFO -     neutral: 641 examples (29.2%)
+2025-03-23 11:21:45,094 - nli_logger_similarity-sbert - INFO -     entailment: 807 examples (36.7%)
+2025-03-23 11:21:45,094 - nli_logger_similarity-sbert - INFO -   test_lay: 2201 examples
+2025-03-23 11:21:45,161 - nli_logger_similarity-sbert - INFO -     neutral: 629 examples (28.6%)
+2025-03-23 11:21:45,161 - nli_logger_similarity-sbert - INFO -     entailment: 808 examples (36.7%)
+2025-03-23 11:21:45,161 - nli_logger_similarity-sbert - INFO -     contradiction: 764 examples (34.7%)
+2025-03-23 11:21:45,161 - nli_logger_similarity-sbert - INFO -   test_expert: 2984 examples
+2025-03-23 11:21:45,249 - nli_logger_similarity-sbert - INFO -     contradiction: 999 examples (33.5%)
+2025-03-23 11:21:45,249 - nli_logger_similarity-sbert - INFO -     entailment: 1041 examples (34.9%)
+2025-03-23 11:21:45,249 - nli_logger_similarity-sbert - INFO -     neutral: 944 examples (31.6%)
+2025-03-23 11:21:45,249 - nli_logger_similarity-sbert - INFO - Converting dataset to SBERT examples
+2025-03-23 11:21:45,249 - nli_logger_similarity-sbert - INFO - Using label mapping: {'entailment': 1.0, 'neutral': 0.5, 'contradiction': 0.0}
+2025-03-23 11:21:45,841 - nli_logger_similarity-sbert - INFO - Created 0 training examples
+2025-03-23 11:21:45,842 - nli_logger_similarity-sbert - INFO - Created 0 validation examples
+2025-03-23 11:21:45,842 - nli_logger_similarity-sbert - INFO - Created 0 test_lay examples
+2025-03-23 11:21:45,842 - nli_logger_similarity-sbert - INFO - Created 0 test_expert examples
+2025-03-23 11:21:45,842 - nli_logger_similarity-sbert - INFO - Creating model from firqaaa/indo-sentence-bert-base
+2025-03-23 11:21:48,093 - nli_logger_similarity-sbert - INFO - Creating evaluator
+2025-03-23 11:21:48,094 - nli_logger_similarity-sbert - ERROR - An error occurred during training: EmbeddingSimilarityEvaluator.__init__() missing 2 required positional arguments: 'sentences2' and 'scores'
+2025-03-23 11:21:48,094 - nli_logger_similarity-sbert - ERROR - An error occurred during training: EmbeddingSimilarityEvaluator.__init__() missing 2 required positional arguments: 'sentences2' and 'scores'

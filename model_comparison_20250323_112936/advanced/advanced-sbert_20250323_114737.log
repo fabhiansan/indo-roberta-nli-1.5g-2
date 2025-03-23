@@ -1,0 +1,20 @@
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO - Initialized NLI logger for model: advanced-sbert
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO - Hyperparameters:
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   base_model: firqaaa/indo-sentence-bert-base
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   pooling_mode: mean_pooling
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   classifier_hidden_sizes: 512,256
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   dropout: 0.2
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   use_cross_attention: False
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   batch_size: 16
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   num_epochs: 5
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   weight_decay: 0.01
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   adam_epsilon: 1e-08
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   max_grad_norm: 1.0
+2025-03-23 11:47:37,703 - nli_logger_advanced-sbert - INFO -   max_length: 128
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   warmup_ratio: 0.06
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   output_dir: ./model_comparison_20250323_112936/advanced
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   seed: 42
+2025-03-23 11:47:37,704 - nli_logger_advanced-sbert - INFO -   use_new_logger: True
+2025-03-23 11:47:38,349 - nli_logger_advanced-sbert - INFO - Using device: cuda
+2025-03-23 11:47:38,743 - nli_logger_advanced-sbert - INFO - Loaded tokenizer from firqaaa/indo-sentence-bert-base

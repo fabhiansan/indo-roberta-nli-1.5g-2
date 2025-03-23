@@ -1,0 +1,141 @@
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO - Initialized NLI logger for model: classifier-sbert
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO - Hyperparameters:
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   base_model: firqaaa/indo-sentence-bert-base
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   batch_size: 16
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   num_epochs: 5
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   learning_rate: 2e-05
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   weight_decay: 0.01
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   max_length: 128
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   warmup_ratio: 0.06
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   output_dir: ./model_comparison_20250323_112936/classifier
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   seed: 42
+2025-03-23 11:29:40,258 - nli_logger_classifier-sbert - INFO -   use_new_logger: True
+2025-03-23 11:29:40,259 - nli_logger_classifier-sbert - INFO - Starting training of classifier-based SBERT model
+2025-03-23 11:29:40,341 - nli_logger_classifier-sbert - INFO - Using device: cuda
+2025-03-23 11:29:42,480 - nli_logger_classifier-sbert - INFO - Loading dataset...
+2025-03-23 11:29:48,896 - nli_logger_classifier-sbert - INFO - Dataset statistics:
+2025-03-23 11:29:48,896 - nli_logger_classifier-sbert - INFO -   train: 10330 examples
+2025-03-23 11:29:49,293 - nli_logger_classifier-sbert - INFO -     contradiction: 3439 examples (33.3%)
+2025-03-23 11:29:49,293 - nli_logger_classifier-sbert - INFO -     entailment: 3476 examples (33.6%)
+2025-03-23 11:29:49,293 - nli_logger_classifier-sbert - INFO -     neutral: 3415 examples (33.1%)
+2025-03-23 11:29:49,293 - nli_logger_classifier-sbert - INFO -   validation: 2197 examples
+2025-03-23 11:29:49,376 - nli_logger_classifier-sbert - INFO -     contradiction: 749 examples (34.1%)
+2025-03-23 11:29:49,376 - nli_logger_classifier-sbert - INFO -     neutral: 641 examples (29.2%)
+2025-03-23 11:29:49,376 - nli_logger_classifier-sbert - INFO -     entailment: 807 examples (36.7%)
+2025-03-23 11:29:49,376 - nli_logger_classifier-sbert - INFO -   test_lay: 2201 examples
+2025-03-23 11:29:49,460 - nli_logger_classifier-sbert - INFO -     neutral: 629 examples (28.6%)
+2025-03-23 11:29:49,461 - nli_logger_classifier-sbert - INFO -     entailment: 808 examples (36.7%)
+2025-03-23 11:29:49,461 - nli_logger_classifier-sbert - INFO -     contradiction: 764 examples (34.7%)
+2025-03-23 11:29:49,461 - nli_logger_classifier-sbert - INFO -   test_expert: 2984 examples
+2025-03-23 11:29:49,571 - nli_logger_classifier-sbert - INFO -     contradiction: 999 examples (33.5%)
+2025-03-23 11:29:49,572 - nli_logger_classifier-sbert - INFO -     entailment: 1041 examples (34.9%)
+2025-03-23 11:29:49,572 - nli_logger_classifier-sbert - INFO -     neutral: 944 examples (31.6%)
+2025-03-23 11:29:50,112 - nli_logger_classifier-sbert - INFO - Starting training loop
+2025-03-23 11:29:51,280 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 0, Loss: 1.3082, LR: 0.000000
+2025-03-23 11:30:20,279 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 100, Loss: 1.0607, LR: 0.000010
+2025-03-23 11:30:49,296 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 200, Loss: 0.8216, LR: 0.000020
+2025-03-23 11:31:18,485 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 300, Loss: 0.8034, LR: 0.000019
+2025-03-23 11:31:47,856 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 400, Loss: 0.7757, LR: 0.000019
+2025-03-23 11:32:17,442 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 500, Loss: 0.7941, LR: 0.000018
+2025-03-23 11:32:46,872 - nli_logger_classifier-sbert - INFO - Epoch 1, Step 600, Loss: 1.1358, LR: 0.000017
+2025-03-23 11:33:12,446 - nli_logger_classifier-sbert - INFO - Evaluation on validation:
+2025-03-23 11:33:12,446 - nli_logger_classifier-sbert - INFO -   Accuracy: 0.5904
+2025-03-23 11:33:12,446 - nli_logger_classifier-sbert - INFO -   Macro F1: 0.5964
+2025-03-23 11:33:12,447 - nli_logger_classifier-sbert - INFO -   Precision: 0.6507
+2025-03-23 11:33:12,447 - nli_logger_classifier-sbert - INFO -   Recall: 0.6017
+2025-03-23 11:33:12,447 - nli_logger_classifier-sbert - INFO -   entailment - F1: 0.5529, Precision: 0.6598, Recall: 0.4758
+2025-03-23 11:33:12,447 - nli_logger_classifier-sbert - INFO -   neutral - F1: 0.5573, Precision: 0.4380, Recall: 0.7660
+2025-03-23 11:33:12,447 - nli_logger_classifier-sbert - INFO -   contradiction - F1: 0.6790, Precision: 0.8543, Recall: 0.5634
+2025-03-23 11:33:12,774 - nli_logger_classifier-sbert - INFO - Confusion matrix saved to ./model_comparison_20250323_112936/classifier/figures/classifier-sbert/validation_epoch-1_20250323_113312_confusion_matrix.png
+2025-03-23 11:33:14,110 - nli_logger_classifier-sbert - INFO - Epoch 1 completed:
+2025-03-23 11:33:14,111 - nli_logger_classifier-sbert - INFO -   Train Loss: 0.9363
+2025-03-23 11:33:14,111 - nli_logger_classifier-sbert - INFO -   Validation Accuracy: 0.5904
+2025-03-23 11:33:14,111 - nli_logger_classifier-sbert - INFO -   Validation F1: 0.5964
+2025-03-23 11:33:14,111 - nli_logger_classifier-sbert - INFO -   Checkpoint saved: ./model_comparison_20250323_112936/classifier/checkpoint-1
+2025-03-23 11:33:14,111 - nli_logger_classifier-sbert - INFO - New best model: ./model_comparison_20250323_112936/classifier/checkpoint-1
+2025-03-23 11:33:14,936 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 0, Loss: 0.7410, LR: 0.000017
+2025-03-23 11:33:44,836 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 100, Loss: 0.9929, LR: 0.000016
+2025-03-23 11:34:14,601 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 200, Loss: 0.6850, LR: 0.000016
+2025-03-23 11:34:44,180 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 300, Loss: 0.4834, LR: 0.000015
+2025-03-23 11:35:13,795 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 400, Loss: 0.8194, LR: 0.000014
+2025-03-23 11:35:43,538 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 500, Loss: 0.6187, LR: 0.000014
+2025-03-23 11:36:13,164 - nli_logger_classifier-sbert - INFO - Epoch 2, Step 600, Loss: 0.5807, LR: 0.000013
+2025-03-23 11:36:38,663 - nli_logger_classifier-sbert - INFO - Evaluation on validation:
+2025-03-23 11:36:38,663 - nli_logger_classifier-sbert - INFO -   Accuracy: 0.6445
+2025-03-23 11:36:38,663 - nli_logger_classifier-sbert - INFO -   Macro F1: 0.6389
+2025-03-23 11:36:38,663 - nli_logger_classifier-sbert - INFO -   Precision: 0.6425
+2025-03-23 11:36:38,664 - nli_logger_classifier-sbert - INFO -   Recall: 0.6382
+2025-03-23 11:36:38,664 - nli_logger_classifier-sbert - INFO -   entailment - F1: 0.6361, Precision: 0.6114, Recall: 0.6629
+2025-03-23 11:36:38,664 - nli_logger_classifier-sbert - INFO -   neutral - F1: 0.5616, Precision: 0.6069, Recall: 0.5226
+2025-03-23 11:36:38,664 - nli_logger_classifier-sbert - INFO -   contradiction - F1: 0.7189, Precision: 0.7091, Recall: 0.7290
+2025-03-23 11:36:39,087 - nli_logger_classifier-sbert - INFO - Confusion matrix saved to ./model_comparison_20250323_112936/classifier/figures/classifier-sbert/validation_epoch-2_20250323_113638_confusion_matrix.png
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO - Epoch 2 completed:
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO -   Train Loss: 0.7063
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO -   Validation Accuracy: 0.6445
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO -   Validation F1: 0.6389
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO -   Checkpoint saved: ./model_comparison_20250323_112936/classifier/checkpoint-2
+2025-03-23 11:36:40,149 - nli_logger_classifier-sbert - INFO - New best model: ./model_comparison_20250323_112936/classifier/checkpoint-2
+2025-03-23 11:36:40,767 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 0, Loss: 0.5829, LR: 0.000013
+2025-03-23 11:37:10,077 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 100, Loss: 0.5214, LR: 0.000012
+2025-03-23 11:37:39,388 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 200, Loss: 0.6615, LR: 0.000011
+2025-03-23 11:38:08,378 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 300, Loss: 0.4547, LR: 0.000011
+2025-03-23 11:38:38,001 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 400, Loss: 0.4156, LR: 0.000010
+2025-03-23 11:39:07,605 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 500, Loss: 0.2463, LR: 0.000009
+2025-03-23 11:39:36,801 - nli_logger_classifier-sbert - INFO - Epoch 3, Step 600, Loss: 0.5079, LR: 0.000009
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO - Evaluation on validation:
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   Accuracy: 0.6208
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   Macro F1: 0.6184
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   Precision: 0.6183
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   Recall: 0.6212
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   entailment - F1: 0.5861, Precision: 0.6271, Recall: 0.5502
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   neutral - F1: 0.5623, Precision: 0.5361, Recall: 0.5913
+2025-03-23 11:40:02,129 - nli_logger_classifier-sbert - INFO -   contradiction - F1: 0.7067, Precision: 0.6918, Recall: 0.7223
+2025-03-23 11:40:02,489 - nli_logger_classifier-sbert - INFO - Confusion matrix saved to ./model_comparison_20250323_112936/classifier/figures/classifier-sbert/validation_epoch-3_20250323_114002_confusion_matrix.png
+2025-03-23 11:40:03,580 - nli_logger_classifier-sbert - INFO - Epoch 3 completed:
+2025-03-23 11:40:03,581 - nli_logger_classifier-sbert - INFO -   Train Loss: 0.4836
+2025-03-23 11:40:03,581 - nli_logger_classifier-sbert - INFO -   Validation Accuracy: 0.6208
+2025-03-23 11:40:03,581 - nli_logger_classifier-sbert - INFO -   Validation F1: 0.6184
+2025-03-23 11:40:03,581 - nli_logger_classifier-sbert - INFO -   Checkpoint saved: ./model_comparison_20250323_112936/classifier/checkpoint-3
+2025-03-23 11:40:04,236 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 0, Loss: 0.1979, LR: 0.000009
+2025-03-23 11:40:33,621 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 100, Loss: 0.2343, LR: 0.000008
+2025-03-23 11:41:02,904 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 200, Loss: 0.2131, LR: 0.000007
+2025-03-23 11:41:32,128 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 300, Loss: 0.3606, LR: 0.000007
+2025-03-23 11:42:01,647 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 400, Loss: 0.2776, LR: 0.000006
+2025-03-23 11:42:31,164 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 500, Loss: 0.2514, LR: 0.000005
+2025-03-23 11:43:01,381 - nli_logger_classifier-sbert - INFO - Epoch 4, Step 600, Loss: 0.2989, LR: 0.000005
+2025-03-23 11:43:27,426 - nli_logger_classifier-sbert - INFO - Evaluation on validation:
+2025-03-23 11:43:27,426 - nli_logger_classifier-sbert - INFO -   Accuracy: 0.6145
+2025-03-23 11:43:27,426 - nli_logger_classifier-sbert - INFO -   Macro F1: 0.6136
+2025-03-23 11:43:27,427 - nli_logger_classifier-sbert - INFO -   Precision: 0.6168
+2025-03-23 11:43:27,427 - nli_logger_classifier-sbert - INFO -   Recall: 0.6179
+2025-03-23 11:43:27,427 - nli_logger_classifier-sbert - INFO -   entailment - F1: 0.5685, Precision: 0.6282, Recall: 0.5192
+2025-03-23 11:43:27,427 - nli_logger_classifier-sbert - INFO -   neutral - F1: 0.5704, Precision: 0.5178, Recall: 0.6349
+2025-03-23 11:43:27,427 - nli_logger_classifier-sbert - INFO -   contradiction - F1: 0.7019, Precision: 0.7043, Recall: 0.6996
+2025-03-23 11:43:27,801 - nli_logger_classifier-sbert - INFO - Confusion matrix saved to ./model_comparison_20250323_112936/classifier/figures/classifier-sbert/validation_epoch-4_20250323_114327_confusion_matrix.png
+2025-03-23 11:43:28,854 - nli_logger_classifier-sbert - INFO - Epoch 4 completed:
+2025-03-23 11:43:28,855 - nli_logger_classifier-sbert - INFO -   Train Loss: 0.2874
+2025-03-23 11:43:28,855 - nli_logger_classifier-sbert - INFO -   Validation Accuracy: 0.6145
+2025-03-23 11:43:28,855 - nli_logger_classifier-sbert - INFO -   Validation F1: 0.6136
+2025-03-23 11:43:28,855 - nli_logger_classifier-sbert - INFO -   Checkpoint saved: ./model_comparison_20250323_112936/classifier/checkpoint-4
+2025-03-23 11:43:29,426 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 0, Loss: 0.0960, LR: 0.000004
+2025-03-23 11:43:59,001 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 100, Loss: 0.0979, LR: 0.000004
+2025-03-23 11:44:28,326 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 200, Loss: 0.3457, LR: 0.000003
+2025-03-23 11:44:57,610 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 300, Loss: 0.1334, LR: 0.000002
+2025-03-23 11:45:27,628 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 400, Loss: 0.1183, LR: 0.000002
+2025-03-23 11:45:56,976 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 500, Loss: 0.1187, LR: 0.000001
+2025-03-23 11:46:26,327 - nli_logger_classifier-sbert - INFO - Epoch 5, Step 600, Loss: 0.3584, LR: 0.000000
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO - Evaluation on validation:
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   Accuracy: 0.6076
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   Macro F1: 0.6073
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   Precision: 0.6092
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   Recall: 0.6075
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   entailment - F1: 0.5819, Precision: 0.5943, Recall: 0.5700
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   neutral - F1: 0.5495, Precision: 0.5180, Recall: 0.5850
+2025-03-23 11:46:51,285 - nli_logger_classifier-sbert - INFO -   contradiction - F1: 0.6906, Precision: 0.7153, Recall: 0.6676
+2025-03-23 11:46:51,697 - nli_logger_classifier-sbert - INFO - Confusion matrix saved to ./model_comparison_20250323_112936/classifier/figures/classifier-sbert/validation_epoch-5_20250323_114651_confusion_matrix.png
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO - Epoch 5 completed:
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO -   Train Loss: 0.1713
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO -   Validation Accuracy: 0.6076
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO -   Validation F1: 0.6073
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO -   Checkpoint saved: ./model_comparison_20250323_112936/classifier/checkpoint-5
+2025-03-23 11:46:52,726 - nli_logger_classifier-sbert - INFO - Loading best model from ./model_comparison_20250323_112936/classifier/checkpoint-2
