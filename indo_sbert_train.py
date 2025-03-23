@@ -20,8 +20,8 @@ from transformers import (
     get_linear_schedule_with_warmup
 )
 from datasets import load_dataset
-from utils import set_seed, setup_logging
-
+from utils import set_seed
+from nli_logger import create_logger, NLILogger
 
 class NLIDataset(Dataset):
     """Dataset for NLI task."""
@@ -447,6 +447,363 @@ def train_model(
     return model
 
 
+def train_with_nli_logger(args, logger):
+    """
+    Train the classifier-based SBERT model with the new NLILogger.
+    
+    Args:
+        args: Arguments
+        logger: NLILogger instance
+    """
+    # Log start of training
+    logger.logger.info("Starting training of classifier-based SBERT model")
+    logger.logger.info(f"Using device: {device}")
+    
+    # Load tokenizer and create model
+    tokenizer = AutoTokenizer.from_pretrained(args.base_model)
+    model = SBERTModel(args.base_model)
+    
+    # Move model to device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
+    
+    # Log dataset loading
+    logger.logger.info("Loading dataset...")
+    
+    # Load dataset
+    try:
+        dataset = load_dataset("indonli")
+        train_dataset = dataset["train"]
+        validation_dataset = dataset["validation"]
+        test_lay_dataset = dataset["test_lay"]
+        test_expert_dataset = dataset["test_expert"]
+        
+        # Log dataset statistics
+        logger.log_dataset_statistics({
+            "train": train_dataset,
+            "validation": validation_dataset,
+            "test_lay": test_lay_dataset,
+            "test_expert": test_expert_dataset
+        })
+        
+    except Exception as e:
+        logger.logger.error(f"Error loading dataset: {e}")
+        # Try loading from local directories if HuggingFace fails
+        try:
+            dataset = load_dataset("json", data_files={
+                "train": "data/indonli/train.json",
+                "validation": "data/indonli/valid.json",
+                "test_lay": "data/indonli/test_lay.json",
+                "test_expert": "data/indonli/test_expert.json"
+            })
+            train_dataset = dataset["train"]
+            validation_dataset = dataset["validation"]
+            test_lay_dataset = dataset["test_lay"]
+            test_expert_dataset = dataset["test_expert"]
+            
+            # Log dataset statistics
+            logger.log_dataset_statistics({
+                "train": train_dataset,
+                "validation": validation_dataset,
+                "test_lay": test_lay_dataset,
+                "test_expert": test_expert_dataset
+            })
+            
+        except Exception as e2:
+            logger.logger.error(f"Error loading local dataset: {e2}")
+            raise RuntimeError(f"Failed to load dataset from either HF or local: {e}, {e2}")
+    
+    # Create datasets
+    train_dataset = NLIDataset(train_dataset, tokenizer, max_length=args.max_length)
+    validation_dataset = NLIDataset(validation_dataset, tokenizer, max_length=args.max_length)
+    test_lay_dataset = NLIDataset(test_lay_dataset, tokenizer, max_length=args.max_length)
+    test_expert_dataset = NLIDataset(test_expert_dataset, tokenizer, max_length=args.max_length)
+    
+    # Create data loaders
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=args.batch_size,
+        shuffle=True,
+        num_workers=4
+    )
+    
+    validation_loader = DataLoader(
+        validation_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=4
+    )
+    
+    test_lay_loader = DataLoader(
+        test_lay_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=4
+    )
+    
+    test_expert_loader = DataLoader(
+        test_expert_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=4
+    )
+    
+    # Define optimizer and scheduler
+    optimizer = AdamW(
+        model.parameters(),
+        lr=args.learning_rate,
+        weight_decay=args.weight_decay
+    )
+    
+    total_steps = len(train_loader) * args.num_epochs
+    warmup_steps = int(total_steps * args.warmup_ratio)
+    
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer,
+        num_warmup_steps=warmup_steps,
+        num_training_steps=total_steps
+    )
+    
+    # Define loss function
+    criterion = nn.CrossEntropyLoss()
+    
+    # Training loop
+    logger.logger.info("Starting training loop")
+    
+    best_val_accuracy = 0.0
+    best_model_path = None
+    
+    for epoch in range(args.num_epochs):
+        # Training
+        model.train()
+        train_loss = 0.0
+        
+        for step, batch in enumerate(tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.num_epochs}")):
+            # Move batch to device
+            input_ids = batch["premise_input_ids"].to(device)
+            attention_mask = batch["premise_attention_mask"].to(device)
+            hypothesis_input_ids = batch["hypothesis_input_ids"].to(device)
+            hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
+            labels = batch["label"].to(device)
+            
+            # Skip batches with invalid labels
+            if (labels < 0).any():
+                logger.logger.warning(f"Skipping batch with invalid labels: {labels}")
+                continue
+            
+            # Zero gradients
+            optimizer.zero_grad()
+            
+            # Forward pass
+            logits = model.predict(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                hypothesis_input_ids=hypothesis_input_ids,
+                hypothesis_attention_mask=hypothesis_attention_mask
+            )
+            
+            # Calculate loss
+            loss = criterion(logits, labels)
+            
+            # Backward pass
+            loss.backward()
+            
+            # Update weights
+            optimizer.step()
+            scheduler.step()
+            
+            # Update loss
+            train_loss += loss.item()
+            
+            # Log every 100 steps
+            if step % 100 == 0:
+                logger.log_train_step(
+                    epoch=epoch+1,
+                    step=step,
+                    loss=loss.item(),
+                    lr=scheduler.get_last_lr()[0]
+                )
+        
+        # Calculate average training loss
+        avg_train_loss = train_loss / len(train_loader)
+        
+        # Validation
+        model.eval()
+        all_preds = []
+        all_labels = []
+        
+        with torch.no_grad():
+            for batch in tqdm(validation_loader, desc="Validation"):
+                # Move batch to device
+                input_ids = batch["premise_input_ids"].to(device)
+                attention_mask = batch["premise_attention_mask"].to(device)
+                hypothesis_input_ids = batch["hypothesis_input_ids"].to(device)
+                hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
+                labels = batch["label"].to(device)
+                
+                # Skip batches with invalid labels
+                if (labels < 0).any():
+                    continue
+                
+                # Forward pass
+                logits = model.predict(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    hypothesis_input_ids=hypothesis_input_ids,
+                    hypothesis_attention_mask=hypothesis_attention_mask
+                )
+                
+                # Get predictions
+                preds = torch.argmax(logits, dim=1)
+                
+                # Move predictions and labels to CPU
+                preds = preds.cpu().numpy()
+                labels = labels.cpu().numpy()
+                
+                # Append predictions and labels
+                all_preds.extend(preds)
+                all_labels.extend(labels)
+        
+        # Calculate validation metrics
+        val_metrics = logger.log_evaluation(
+            dataset_name="validation",
+            predictions=all_preds,
+            labels=all_labels,
+            checkpoint_name=f"epoch-{epoch+1}"
+        )
+        
+        # Save checkpoint
+        checkpoint_path = os.path.join(args.output_dir, f"checkpoint-{epoch+1}")
+        os.makedirs(checkpoint_path, exist_ok=True)
+        
+        # Save model
+        model.bert.save_pretrained(checkpoint_path)
+        tokenizer.save_pretrained(checkpoint_path)
+        
+        # Save classifier weights separately
+        torch.save(model.classifier.state_dict(), os.path.join(checkpoint_path, "classifier.pt"))
+        
+        # Log epoch
+        logger.log_epoch(
+            epoch=epoch+1,
+            train_loss=avg_train_loss,
+            val_metrics=val_metrics,
+            checkpoint_path=checkpoint_path
+        )
+        
+        # Check if this is the best model
+        if val_metrics["accuracy"] > best_val_accuracy:
+            best_val_accuracy = val_metrics["accuracy"]
+            best_model_path = checkpoint_path
+            logger.logger.info(f"New best model: {best_model_path}")
+    
+    # Load best model for evaluation
+    logger.logger.info(f"Loading best model from {best_model_path}")
+    model = SBERTModel.from_pretrained(best_model_path)
+    model.to(device)
+    
+    # Evaluate on test sets
+    model.eval()
+    
+    # Evaluate on test_lay
+    logger.logger.info("Evaluating on test_lay dataset")
+    all_preds = []
+    all_labels = []
+    
+    with torch.no_grad():
+        for batch in tqdm(test_lay_loader, desc="Test Lay"):
+            # Move batch to device
+            input_ids = batch["premise_input_ids"].to(device)
+            attention_mask = batch["premise_attention_mask"].to(device)
+            hypothesis_input_ids = batch["hypothesis_input_ids"].to(device)
+            hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
+            labels = batch["label"].to(device)
+            
+            # Skip batches with invalid labels
+            if (labels < 0).any():
+                continue
+            
+            # Forward pass
+            logits = model.predict(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                hypothesis_input_ids=hypothesis_input_ids,
+                hypothesis_attention_mask=hypothesis_attention_mask
+            )
+            
+            # Get predictions
+            preds = torch.argmax(logits, dim=1)
+            
+            # Move predictions and labels to CPU
+            preds = preds.cpu().numpy()
+            labels = labels.cpu().numpy()
+            
+            # Append predictions and labels
+            all_preds.extend(preds)
+            all_labels.extend(labels)
+    
+    # Log evaluation results
+    logger.log_evaluation(
+        dataset_name="test_lay",
+        predictions=all_preds,
+        labels=all_labels,
+        checkpoint_name="best"
+    )
+    
+    # Evaluate on test_expert
+    logger.logger.info("Evaluating on test_expert dataset")
+    all_preds = []
+    all_labels = []
+    
+    with torch.no_grad():
+        for batch in tqdm(test_expert_loader, desc="Test Expert"):
+            # Move batch to device
+            input_ids = batch["premise_input_ids"].to(device)
+            attention_mask = batch["premise_attention_mask"].to(device)
+            hypothesis_input_ids = batch["hypothesis_input_ids"].to(device)
+            hypothesis_attention_mask = batch["hypothesis_attention_mask"].to(device)
+            labels = batch["label"].to(device)
+            
+            # Skip batches with invalid labels
+            if (labels < 0).any():
+                continue
+            
+            # Forward pass
+            logits = model.predict(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                hypothesis_input_ids=hypothesis_input_ids,
+                hypothesis_attention_mask=hypothesis_attention_mask
+            )
+            
+            # Get predictions
+            preds = torch.argmax(logits, dim=1)
+            
+            # Move predictions and labels to CPU
+            preds = preds.cpu().numpy()
+            labels = labels.cpu().numpy()
+            
+            # Append predictions and labels
+            all_preds.extend(preds)
+            all_labels.extend(labels)
+    
+    # Log evaluation results
+    logger.log_evaluation(
+        dataset_name="test_expert",
+        predictions=all_preds,
+        labels=all_labels,
+        checkpoint_name="best"
+    )
+    
+    # Generate visualizations and report
+    logger.plot_training_curve()
+    logger.compare_checkpoints()
+    logger.generate_summary_report()
+    
+    logger.logger.info("Training and evaluation complete")
+    return best_model_path
+
+
 def load_model(model_path, device=None):
     """
     Load a trained SBERT model.
@@ -493,24 +850,27 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Train SBERT-like model on IndoNLI dataset")
     
-    parser.add_argument("--model_name", type=str, default="firqaaa/indo-sentence-bert-base",
-                        help="Pre-trained model name or path")
-    parser.add_argument("--output_path", type=str, default="./outputs/indo-sbert-nli-custom",
-                        help="Directory to save the model")
-    parser.add_argument("--batch_size", type=int, default=16,
-                        help="Training batch size")
-    parser.add_argument("--num_epochs", type=int, default=3,
-                        help="Number of training epochs")
-    parser.add_argument("--learning_rate", type=float, default=2e-5,
-                        help="Learning rate")
-    parser.add_argument("--max_seq_length", type=int, default=128,
-                        help="Maximum sequence length")
-    parser.add_argument("--warmup_ratio", type=float, default=0.1,
-                        help="Ratio of warmup steps")
-    parser.add_argument("--seed", type=int, default=42,
-                        help="Random seed")
-    parser.add_argument("--no_mean_pooling", action="store_true",
-                        help="Use CLS token instead of mean pooling")
+    # Model parameters
+    parser.add_argument("--base_model", type=str, default="firqaaa/indo-sentence-bert-base",
+                        help="Base model to use")
+    
+    # Training parameters
+    parser.add_argument("--batch_size", type=int, default=32, help="Training batch size")
+    parser.add_argument("--num_epochs", type=int, default=5, help="Number of training epochs")
+    parser.add_argument("--learning_rate", type=float, default=2e-5, help="Learning rate")
+    parser.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay")
+    parser.add_argument("--max_length", type=int, default=128, help="Maximum sequence length")
+    parser.add_argument("--warmup_ratio", type=float, default=0.06, help="Warmup ratio")
+    
+    # Output parameters
+    parser.add_argument("--output_dir", type=str, default="./outputs/indo-sbert-classifier",
+                        help="Output directory")
+    
+    # Other parameters
+    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    
+    # New logger parameter
+    parser.add_argument("--use_new_logger", action="store_true", help="Use the new NLILogger")
     
     return parser.parse_args()
 
@@ -519,17 +879,44 @@ def main():
     """Main function."""
     args = parse_args()
     
-    train_model(
-        model_name=args.model_name,
-        output_path=args.output_path,
-        batch_size=args.batch_size,
-        num_epochs=args.num_epochs,
-        learning_rate=args.learning_rate,
-        max_seq_length=args.max_seq_length,
-        warmup_ratio=args.warmup_ratio,
-        seed=args.seed,
-        use_mean_pooling=not args.no_mean_pooling
-    )
+    # Set random seed for reproducibility
+    set_seed(args.seed)
+    
+    # Create output directory
+    os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Setup either traditional logging or the new NLILogger
+    if args.use_new_logger:
+        logger = create_logger("classifier-sbert", args.output_dir)
+        logger.log_hyperparameters(vars(args))
+    else:
+        # Setup traditional logging
+        log_file = os.path.join(args.output_dir, 'train.log')
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_file),
+                logging.StreamHandler()
+            ]
+        )
+        logger = logging.getLogger(__name__)
+        logger.info(f"Arguments: {args}")
+    
+    # Train the model
+    if args.use_new_logger:
+        train_with_nli_logger(args, logger)
+    else:
+        train_model(
+            model_name=args.base_model,
+            output_path=args.output_dir,
+            batch_size=args.batch_size,
+            num_epochs=args.num_epochs,
+            learning_rate=args.learning_rate,
+            max_seq_length=args.max_length,
+            warmup_ratio=args.warmup_ratio,
+            seed=args.seed
+        )
 
 
 if __name__ == "__main__":

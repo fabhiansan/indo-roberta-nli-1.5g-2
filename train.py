@@ -11,6 +11,7 @@ from data_loader import get_indonli_data
 from trainer import Trainer
 from utils import set_seed, setup_logging, push_to_hub, count_parameters
 from config import Config
+from nli_logger import NLILogger
 
 
 def parse_args():
@@ -75,6 +76,10 @@ def parse_args():
                         help="Only run evaluation")
     parser.add_argument("--checkpoint", type=str, default=None,
                         help="Path to model checkpoint for evaluation")
+    
+    # Unified logging
+    parser.add_argument("--use_nli_logger", action="store_true",
+                        help="Use the unified NLILogger for consistent logging across models")
     
     return parser.parse_args()
 
@@ -151,10 +156,26 @@ def main():
     logger.info("Starting training...")
     start_time = time.time()
     
-    trainer.train(
-        epochs=args.epochs,
-        early_stopping_patience=args.early_stopping_patience
-    )
+    if args.use_nli_logger:
+        # Initialize NLILogger for unified logging
+        logger.info("Using unified NLILogger for training")
+        nli_logger = NLILogger(
+            model_name=f"roberta-nli-{args.model_name.split('/')[-1]}",
+            output_dir=args.output_dir
+        )
+        
+        # Train using the new logger
+        best_model_path = trainer.train_with_nli_logger(
+            epochs=args.epochs,
+            logger=nli_logger,
+            early_stopping_patience=args.early_stopping_patience
+        )
+    else:
+        # Use the regular training method
+        trainer.train(
+            epochs=args.epochs,
+            early_stopping_patience=args.early_stopping_patience
+        )
     
     end_time = time.time()
     training_time = end_time - start_time

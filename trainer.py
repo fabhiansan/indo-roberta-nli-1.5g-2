@@ -15,6 +15,9 @@ from datetime import datetime
 import pandas as pd
 import csv
 
+# Import the NLILogger for unified logging
+from nli_logger import NLILogger
+
 
 class Trainer:
     """
@@ -468,3 +471,252 @@ class Trainer:
             
         plt.savefig(os.path.join(self.metrics_dir, file_name))
         plt.close()
+    
+    def train_with_nli_logger(self, epochs=3, logger=None, early_stopping_patience=3):
+        """
+        Train the model using the unified NLILogger.
+        
+        Args:
+            epochs: Number of training epochs
+            logger: NLILogger instance
+            early_stopping_patience: Number of epochs to wait for improvement before stopping
+            
+        Returns:
+            Path to the best model checkpoint
+        """
+        if logger is None:
+            raise ValueError("NLILogger instance must be provided")
+        
+        # Log device and hyperparameters
+        logger.logger.info(f"Training on {self.device}")
+        
+        # Log hyperparameters
+        hparams = {
+            'model_type': self.model.__class__.__name__,
+            'learning_rate': self.learning_rate,
+            'weight_decay': self.weight_decay,
+            'adam_epsilon': self.adam_epsilon,
+            'warmup_steps': self.warmup_steps,
+            'gradient_accumulation_steps': self.gradient_accumulation_steps,
+            'max_grad_norm': self.max_grad_norm,
+            'epochs': epochs,
+            'early_stopping_patience': early_stopping_patience
+        }
+        logger.log_hyperparameters(hparams)
+        
+        # Initialize the scheduler
+        total_steps = len(self.data_loaders['train']) // self.gradient_accumulation_steps * epochs
+        self.scheduler = get_linear_schedule_with_warmup(
+            self.optimizer,
+            num_warmup_steps=self.warmup_steps,
+            num_training_steps=total_steps
+        )
+        
+        # Log dataset statistics
+        datasets = {
+            'train': self.data_loaders['train'].dataset,
+            'validation': self.data_loaders['validation'].dataset
+        }
+        if 'test_lay' in self.data_loaders:
+            datasets['test_lay'] = self.data_loaders['test_lay'].dataset
+        if 'test_expert' in self.data_loaders:
+            datasets['test_expert'] = self.data_loaders['test_expert'].dataset
+        
+        logger.log_dataset_statistics(datasets)
+        
+        # Early stopping variables
+        best_val_accuracy = 0.0
+        patience_counter = 0
+        best_model_path = None
+        
+        for epoch in range(epochs):
+            logger.logger.info(f"Starting epoch {epoch + 1}/{epochs}")
+            
+            # Training
+            self.model.train()
+            train_loss = 0.0
+            
+            train_dataloader = self.data_loaders['train']
+            epoch_iterator = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{epochs}")
+            
+            for step, batch in enumerate(epoch_iterator):
+                # Move batch to device
+                batch = {k: v.to(self.device) for k, v in batch.items()}
+                
+                # Forward pass
+                outputs = self.model(**batch)
+                loss = outputs.loss
+                
+                # Normalize loss for gradient accumulation
+                loss = loss / self.gradient_accumulation_steps
+                
+                # Backward pass
+                loss.backward()
+                
+                # Update weights if we've accumulated enough gradients
+                if (step + 1) % self.gradient_accumulation_steps == 0:
+                    # Clip gradients
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.max_grad_norm)
+                    
+                    # Update parameters
+                    self.optimizer.step()
+                    self.scheduler.step()
+                    
+                    # Zero gradients
+                    self.optimizer.zero_grad()
+                
+                # Update progress bar
+                train_loss += loss.item() * self.gradient_accumulation_steps
+                epoch_iterator.set_postfix({'loss': train_loss / (step + 1)})
+                
+                # Log training step periodically
+                if step % 100 == 0:
+                    logger.log_train_step(
+                        epoch=epoch+1,
+                        step=step,
+                        loss=loss.item() * self.gradient_accumulation_steps,
+                        lr=self.scheduler.get_last_lr()[0]
+                    )
+            
+            # Calculate average training loss
+            avg_train_loss = train_loss / len(train_dataloader)
+            
+            # Validation
+            self.model.eval()
+            val_preds = []
+            val_labels = []
+            val_loss = 0.0
+            
+            with torch.no_grad():
+                for batch in tqdm(self.data_loaders['validation'], desc="Validation"):
+                    # Move batch to device
+                    batch = {k: v.to(self.device) for k, v in batch.items()}
+                    
+                    # Forward pass
+                    outputs = self.model(**batch)
+                    loss = outputs.loss
+                    logits = outputs.logits
+                    
+                    # Collect loss
+                    val_loss += loss.item()
+                    
+                    # Get predictions
+                    preds = torch.argmax(logits, dim=1).cpu().numpy()
+                    labels = batch['labels'].cpu().numpy()
+                    
+                    val_preds.extend(preds)
+                    val_labels.extend(labels)
+            
+            # Log validation results
+            val_metrics = logger.log_evaluation(
+                dataset_name="validation",
+                predictions=val_preds,
+                labels=val_labels,
+                checkpoint_name=f"epoch-{epoch+1}"
+            )
+            
+            # Save checkpoint
+            checkpoint_path = os.path.join(self.output_dir, f"checkpoint-{epoch+1}")
+            os.makedirs(checkpoint_path, exist_ok=True)
+            
+            # Save model
+            self.model.save_pretrained(checkpoint_path)
+            
+            # Log epoch
+            logger.log_epoch(
+                epoch=epoch+1,
+                train_loss=avg_train_loss,
+                val_metrics=val_metrics,
+                checkpoint_path=checkpoint_path
+            )
+            
+            # Check if this is the best model
+            if val_metrics["accuracy"] > best_val_accuracy:
+                best_val_accuracy = val_metrics["accuracy"]
+                patience_counter = 0
+                
+                # Save the best model
+                best_model_path = os.path.join(self.output_dir, "best_model")
+                os.makedirs(best_model_path, exist_ok=True)
+                self.model.save_pretrained(best_model_path)
+                logger.logger.info(f"New best model: {best_model_path} (accuracy: {best_val_accuracy:.4f})")
+            else:
+                patience_counter += 1
+                if patience_counter >= early_stopping_patience:
+                    logger.logger.info(f"Early stopping triggered after {epoch + 1} epochs")
+                    break
+        
+        # Load best model for final evaluation
+        if best_model_path:
+            logger.logger.info(f"Loading best model from {best_model_path}")
+            self.model = self.model.from_pretrained(best_model_path)
+            self.model.to(self.device)
+        
+        # Evaluate on test sets if available
+        if 'test_lay' in self.data_loaders:
+            logger.logger.info("Evaluating on test_lay dataset")
+            test_lay_preds = []
+            test_lay_labels = []
+            
+            self.model.eval()
+            with torch.no_grad():
+                for batch in tqdm(self.data_loaders['test_lay'], desc="Test Lay"):
+                    # Move batch to device
+                    batch = {k: v.to(self.device) for k, v in batch.items()}
+                    
+                    # Forward pass
+                    outputs = self.model(**batch)
+                    logits = outputs.logits
+                    
+                    # Get predictions
+                    preds = torch.argmax(logits, dim=1).cpu().numpy()
+                    labels = batch['labels'].cpu().numpy()
+                    
+                    test_lay_preds.extend(preds)
+                    test_lay_labels.extend(labels)
+            
+            # Log test_lay metrics
+            logger.log_evaluation(
+                dataset_name="test_lay",
+                predictions=test_lay_preds,
+                labels=test_lay_labels,
+                checkpoint_name="best"
+            )
+        
+        if 'test_expert' in self.data_loaders:
+            logger.logger.info("Evaluating on test_expert dataset")
+            test_expert_preds = []
+            test_expert_labels = []
+            
+            self.model.eval()
+            with torch.no_grad():
+                for batch in tqdm(self.data_loaders['test_expert'], desc="Test Expert"):
+                    # Move batch to device
+                    batch = {k: v.to(self.device) for k, v in batch.items()}
+                    
+                    # Forward pass
+                    outputs = self.model(**batch)
+                    logits = outputs.logits
+                    
+                    # Get predictions
+                    preds = torch.argmax(logits, dim=1).cpu().numpy()
+                    labels = batch['labels'].cpu().numpy()
+                    
+                    test_expert_preds.extend(preds)
+                    test_expert_labels.extend(labels)
+            
+            # Log test_expert metrics
+            logger.log_evaluation(
+                dataset_name="test_expert",
+                predictions=test_expert_preds,
+                labels=test_expert_labels,
+                checkpoint_name="best"
+            )
+        
+        # Generate visualizations and report
+        logger.plot_training_curve()
+        logger.compare_checkpoints()
+        logger.generate_summary_report()
+        
+        logger.logger.info("Training and evaluation complete")
+        return best_model_path
