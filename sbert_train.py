@@ -364,8 +364,16 @@ def train_sbert_with_logger(
         
         # Create evaluator for validation data
         logger.logger.info("Creating evaluator")
+        
+        # Extract sentences and scores for the evaluator
+        sentences1 = [example.texts[0] for example in dev_examples]
+        sentences2 = [example.texts[1] for example in dev_examples]
+        scores = [example.label for example in dev_examples]
+        
         evaluator = evaluation.EmbeddingSimilarityEvaluator(
-            dev_examples,
+            sentences1=sentences1,
+            sentences2=sentences2,
+            scores=scores,
             name="indonli-dev"
         )
         

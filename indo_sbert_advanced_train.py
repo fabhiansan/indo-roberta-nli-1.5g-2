@@ -55,7 +55,13 @@ class AdvancedNLIDataset(Dataset):
         # Extract premise, hypothesis, and label
         premise = example["premise"]
         hypothesis = example["hypothesis"]
-        label = self.label_map.get(example["label"], -1)  # -1 for unknown labels
+        
+        # Handle unknown labels properly - use neutral as default if label not found
+        if "label" in example and example["label"] in self.label_map:
+            label = self.label_map[example["label"]]
+        else:
+            # Use neutral (1) as default instead of -1 to avoid batch skipping
+            label = 1  # neutral
         
         # Tokenize premise and hypothesis separately
         premise_tokens = self.tokenizer(

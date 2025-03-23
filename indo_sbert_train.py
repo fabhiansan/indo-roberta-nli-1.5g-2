@@ -232,10 +232,10 @@ def train_epoch(model, dataloader, optimizer, scheduler, device):
         
         # Forward pass
         logits = model.predict(
-            batch["premise_input_ids"],
-            batch["premise_attention_mask"],
-            batch["hypothesis_input_ids"],
-            batch["hypothesis_attention_mask"]
+            premise_input_ids=batch["premise_input_ids"],
+            premise_attention_mask=batch["premise_attention_mask"],
+            hypothesis_input_ids=batch["hypothesis_input_ids"],
+            hypothesis_attention_mask=batch["hypothesis_attention_mask"]
         )
         
         # Calculate loss
@@ -282,10 +282,10 @@ def evaluate(model, dataloader, device):
             
             # Forward pass
             logits = model.predict(
-                batch["premise_input_ids"],
-                batch["premise_attention_mask"],
-                batch["hypothesis_input_ids"],
-                batch["hypothesis_attention_mask"]
+                premise_input_ids=batch["premise_input_ids"],
+                premise_attention_mask=batch["premise_attention_mask"],
+                hypothesis_input_ids=batch["hypothesis_input_ids"],
+                hypothesis_attention_mask=batch["hypothesis_attention_mask"]
             )
             
             # Calculate loss
@@ -598,8 +598,8 @@ def train_with_nli_logger(args, logger):
             
             # Forward pass
             logits = model.predict(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
+                premise_input_ids=input_ids,
+                premise_attention_mask=attention_mask,
                 hypothesis_input_ids=hypothesis_input_ids,
                 hypothesis_attention_mask=hypothesis_attention_mask
             )
@@ -649,8 +649,8 @@ def train_with_nli_logger(args, logger):
                 
                 # Forward pass
                 logits = model.predict(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask,
+                    premise_input_ids=input_ids,
+                    premise_attention_mask=attention_mask,
                     hypothesis_input_ids=hypothesis_input_ids,
                     hypothesis_attention_mask=hypothesis_attention_mask
                 )
@@ -727,8 +727,8 @@ def train_with_nli_logger(args, logger):
             
             # Forward pass
             logits = model.predict(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
+                premise_input_ids=input_ids,
+                premise_attention_mask=attention_mask,
                 hypothesis_input_ids=hypothesis_input_ids,
                 hypothesis_attention_mask=hypothesis_attention_mask
             )
@@ -772,8 +772,8 @@ def train_with_nli_logger(args, logger):
             
             # Forward pass
             logits = model.predict(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
+                premise_input_ids=input_ids,
+                premise_attention_mask=attention_mask,
                 hypothesis_input_ids=hypothesis_input_ids,
                 hypothesis_attention_mask=hypothesis_attention_mask
             )

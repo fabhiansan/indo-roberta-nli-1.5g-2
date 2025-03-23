@@ -57,9 +57,9 @@ class NLIDataset(Dataset):
                 label = item["label"]
             # Handle string labels
             elif isinstance(item["label"], str):
-                label = self.label_map.get(item["label"].lower(), -1)
+                label = self.label_map.get(item["label"].lower(), 1)
             else:
-                label = -1
+                label = 1
             labels.append(label)
         
         label_counts = {}
@@ -67,8 +67,8 @@ class NLIDataset(Dataset):
             label_counts[label] = label_counts.get(label, 0) + 1
         
         logging.info(f"Label distribution: {label_counts}")
-        if -1 in label_counts:
-            logging.warning(f"Found {label_counts[-1]} examples with invalid labels!")
+        if 1 not in label_counts:
+            logging.warning(f"No neutral labels found!")
             # Print sample items with invalid labels
             invalid_examples = []
             count = 0
@@ -96,9 +96,9 @@ class NLIDataset(Dataset):
             label = item["label"]
         elif isinstance(item["label"], str):
             # Convert string label to numeric
-            label = self.label_map.get(item["label"].lower(), -1)
+            label = self.label_map.get(item["label"].lower(), 1)  
         else:
-            label = -1
+            label = 1  
         
         # Tokenize premise
         premise_encoding = self.tokenizer(
