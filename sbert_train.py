@@ -454,12 +454,20 @@ def train_sbert_with_logger(
         
         # Train the model
         logger.logger.info("Starting training")
-        model.fit(
-            train_objectives=[(train_dataloader, train_loss)],
-            callback=logger_callback.on_step_end,
-            epoch_callback=logger_callback.on_epoch_end,
-            **train_args
-        )
+        try:
+            model.fit(
+                train_objectives=[(train_dataloader, train_loss)],
+                evaluator=evaluator,
+                epochs=train_args.get('epochs', 1),
+                evaluation_steps=train_args.get('evaluation_steps', 1000),
+                warmup_steps=train_args.get('warmup_steps', 0),
+                output_path=train_args.get('output_path', output_path),
+                optimizer_params={'lr': train_args.get('optimizer_params', {}).get('lr', 2e-5)},
+                callback=logger_callback.on_step_end
+            )
+        except Exception as e:
+            logger.logger.error(f"An error occurred during training: {e}")
+            raise
         
         # Evaluate on test sets
         logger.logger.info("Evaluating on test sets")
