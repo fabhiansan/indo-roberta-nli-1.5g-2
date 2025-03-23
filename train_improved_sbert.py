@@ -954,6 +954,8 @@ if __name__ == "__main__":
                         help="Random seed")
     parser.add_argument("--num_workers", type=int, default=4,
                         help="Number of workers for dataloader")
+    parser.add_argument("--max_grad_norm", type=float, default=1.0,
+                        help="Maximum gradient norm for gradient clipping")
     
     # Add new logger parameter
     parser.add_argument("--use_new_logger", action="store_true",

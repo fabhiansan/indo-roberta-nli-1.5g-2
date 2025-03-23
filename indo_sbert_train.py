@@ -701,8 +701,12 @@ def train_with_nli_logger(args, logger):
     
     # Load best model for evaluation
     logger.logger.info(f"Loading best model from {best_model_path}")
-    model = SBERTModel.from_pretrained(best_model_path)
-    model.to(device)
+    try:
+        model, tokenizer = load_model(best_model_path, device)
+        model.to(device)
+    except Exception as e:
+        logger.logger.error(f"Error loading best model: {e}")
+        logger.logger.info("Continuing with current model instead")
     
     # Evaluate on test sets
     model.eval()

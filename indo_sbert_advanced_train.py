@@ -118,11 +118,11 @@ class AdvancedNLIDataset(Dataset):
         )["input_ids"]
         
         premise_attention_mask = tokenizer.pad(
-            {"input_ids": premise_attention_mask},
+            {"attention_mask": premise_attention_mask},
             padding=True,
             max_length=max_length,
             return_tensors="pt"
-        )["input_ids"]
+        )["attention_mask"]
         
         hypothesis_input_ids = tokenizer.pad(
             {"input_ids": hypothesis_input_ids},
@@ -132,11 +132,11 @@ class AdvancedNLIDataset(Dataset):
         )["input_ids"]
         
         hypothesis_attention_mask = tokenizer.pad(
-            {"input_ids": hypothesis_attention_mask},
+            {"attention_mask": hypothesis_attention_mask},
             padding=True,
             max_length=max_length,
             return_tensors="pt"
-        )["input_ids"]
+        )["attention_mask"]
         
         # Convert to tensors
         labels = torch.tensor(labels)
