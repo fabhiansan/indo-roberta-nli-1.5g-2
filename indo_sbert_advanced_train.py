@@ -352,10 +352,13 @@ def train_with_nli_logger(args, logger):
     # Define loss function
     criterion = torch.nn.CrossEntropyLoss()
     
-    # Training loop
-    logger.logger.info("Starting training")
-    best_val_accuracy = 0.0
+    # Initialize best model tracking
+    best_val_accuracy = 0
     best_model_path = None
+    patience_counter = 0
+    
+    # Training loop
+    logger.logger.info(f"Starting training for {args.num_epochs} epochs")
     
     for epoch in range(args.num_epochs):
         # Training
@@ -491,9 +494,22 @@ def train_with_nli_logger(args, logger):
             logger.logger.info(f"New best model: {best_model_path}")
     
     # Load best model for evaluation
+    if best_model_path is None:
+        logger.logger.warning("No best model saved. Using the last checkpoint instead.")
+        best_model_path = os.path.join(args.output_dir, f"checkpoint-{args.num_epochs}")
+        # If directory doesn't exist, create it and save current model
+        if not os.path.exists(best_model_path):
+            os.makedirs(best_model_path, exist_ok=True)
+            model.save_pretrained(best_model_path)
+            tokenizer.save_pretrained(best_model_path)
+    
     logger.logger.info(f"Loading best model from {best_model_path}")
-    model = SBERTAdvancedModel.from_pretrained(best_model_path)
-    model.to(device)
+    try:
+        model = SBERTAdvancedModel.from_pretrained(best_model_path)
+        model.to(device)
+    except Exception as e:
+        logger.logger.error(f"Error loading best model: {e}")
+        logger.logger.warning("Continuing with current model state")
     
     # Evaluate on test sets
     model.eval()

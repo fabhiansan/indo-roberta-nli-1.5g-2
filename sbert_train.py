@@ -252,44 +252,30 @@ def train_sbert_with_logger(
         seed: Random seed
         logger: NLILogger instance
     """
-    # Create output directory
-    os.makedirs(output_path, exist_ok=True)
-    
-    # Set random seed
-    set_seed(seed)
-    
-    # Log start of training
-    logger.logger.info(f"Starting similarity-based SBERT training with model: {model_name}")
-    
-    # Load dataset
     try:
-        logger.logger.info("Loading IndoNLI dataset from Hugging Face")
+        # Create directory if it doesn't exist
+        os.makedirs(output_path, exist_ok=True)
         
-        # Load dataset splits
-        train_data = load_dataset("indonli", split="train")
-        dev_data = load_dataset("indonli", split="validation")
-        test_lay_data = load_dataset("indonli", split="test_lay")
-        test_expert_data = load_dataset("indonli", split="test_expert")
-        
-        # Log dataset statistics
-        logger.log_dataset_statistics({
-            "train": train_data,
-            "validation": dev_data,
-            "test_lay": test_lay_data,
-            "test_expert": test_expert_data
-        })
-        
-    except Exception as e:
-        logger.logger.error(f"Error loading dataset from Hugging Face: {e}")
-        
-        try:
-            # Try loading from local files
-            logger.logger.info("Attempting to load dataset from local files")
+        # Log start of training
+        if logger:
+            logger.logger.info(f"Starting training of similarity-based SBERT model")
             
-            train_data = load_dataset("json", data_files="data/indonli/train.json", split="train")
-            dev_data = load_dataset("json", data_files="data/indonli/valid.json", split="train")
-            test_lay_data = load_dataset("json", data_files="data/indonli/test_lay.json", split="train")
-            test_expert_data = load_dataset("json", data_files="data/indonli/test_expert.json", split="train")
+            # Setup device
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            logger.logger.info(f"Using device: {device}")
+        
+        # Set random seed
+        set_seed(seed)
+        
+        # Load dataset
+        try:
+            logger.logger.info("Loading IndoNLI dataset from Hugging Face")
+            
+            # Load dataset splits
+            train_data = load_dataset("indonli", split="train")
+            dev_data = load_dataset("indonli", split="validation")
+            test_lay_data = load_dataset("indonli", split="test_lay")
+            test_expert_data = load_dataset("indonli", split="test_expert")
             
             # Log dataset statistics
             logger.log_dataset_statistics({
@@ -299,213 +285,237 @@ def train_sbert_with_logger(
                 "test_expert": test_expert_data
             })
             
-        except Exception as e2:
-            logger.logger.error(f"Error loading dataset from local files: {e2}")
-            raise RuntimeError(f"Failed to load dataset: {e}, {e2}")
-    
-    # Convert datasets to examples
-    logger.logger.info("Converting dataset to SBERT examples")
-    
-    # For NLI-type training with SBERT, we follow the paper's approach:
-    # - Entailment pairs are considered similar (score of 1)
-    # - Contradiction pairs are considered dissimilar (score of 0)
-    # - Neutral pairs can be assigned a similarity score of 0.5
-    
-    label_mapping = {
-        "entailment": 1.0,
-        "neutral": 0.5,
-        "contradiction": 0.0
-    }
-    
-    # Log the label mapping
-    logger.logger.info(f"Using label mapping: {label_mapping}")
-    
-    # Convert datasets to SBERT format
-    train_examples = []
-    for item in train_data:
-        if item["label"] in label_mapping:
-            score = label_mapping[item["label"]]
-            train_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
-    
-    dev_examples = []
-    for item in dev_data:
-        if item["label"] in label_mapping:
-            score = label_mapping[item["label"]]
-            dev_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
-    
-    test_lay_examples = []
-    for item in test_lay_data:
-        if item["label"] in label_mapping:
-            score = label_mapping[item["label"]]
-            test_lay_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
-    
-    test_expert_examples = []
-    for item in test_expert_data:
-        if item["label"] in label_mapping:
-            score = label_mapping[item["label"]]
-            test_expert_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
-    
-    logger.logger.info(f"Created {len(train_examples)} training examples")
-    logger.logger.info(f"Created {len(dev_examples)} validation examples")
-    logger.logger.info(f"Created {len(test_lay_examples)} test_lay examples")
-    logger.logger.info(f"Created {len(test_expert_examples)} test_expert examples")
-    
-    # Create model
-    logger.logger.info(f"Creating model from {model_name}")
-    word_embedding_model = models.Transformer(model_name, max_seq_length=max_seq_length)
-    pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension())
-    model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
-    
-    # Create evaluator for validation data
-    logger.logger.info("Creating evaluator")
-    evaluator = evaluation.EmbeddingSimilarityEvaluator(
-        dev_examples,
-        name="indonli-dev"
-    )
-    
-    # Create train dataloader
-    train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=batch_size)
-    
-    # Calculate warmup steps if not provided
-    if warmup_steps == 0:
-        warmup_steps = int(len(train_dataloader) * 0.1)
+        except Exception as e:
+            logger.logger.error(f"Error loading dataset from Hugging Face: {e}")
+            
+            try:
+                # Try loading from local files
+                logger.logger.info("Attempting to load dataset from local files")
+                
+                train_data = load_dataset("json", data_files="data/indonli/train.json", split="train")
+                dev_data = load_dataset("json", data_files="data/indonli/valid.json", split="train")
+                test_lay_data = load_dataset("json", data_files="data/indonli/test_lay.json", split="train")
+                test_expert_data = load_dataset("json", data_files="data/indonli/test_expert.json", split="train")
+                
+                # Log dataset statistics
+                logger.log_dataset_statistics({
+                    "train": train_data,
+                    "validation": dev_data,
+                    "test_lay": test_lay_data,
+                    "test_expert": test_expert_data
+                })
+                
+            except Exception as e2:
+                logger.logger.error(f"Error loading dataset from local files: {e2}")
+                raise RuntimeError(f"Failed to load dataset: {e}, {e2}")
         
-    logger.logger.info(f"Using {warmup_steps} warmup steps")
-    
-    # Create loss
-    train_loss = losses.CosineSimilarityLoss(model)
-    
-    # Setup training arguments
-    train_args = {
-        "epochs": num_epochs,
-        "evaluation_steps": int(len(train_dataloader) * 0.2),  # Evaluate every 20% of an epoch
-        "evaluator": evaluator,
-        "warmup_steps": warmup_steps,
-        "output_path": output_path,
-        "optimizer_params": {"lr": learning_rate},
-    }
-    
-    # Log training arguments
-    logger.logger.info(f"Training arguments: {train_args}")
-    
-    # Define custom callback to log with NLILogger
-    class LoggerCallback:
-        def __init__(self, logger):
-            self.logger = logger
-            self.step = 0
-            self.epoch = 0
-            self.best_score = -1
-            self.best_checkpoint = None
+        # Convert datasets to examples
+        logger.logger.info("Converting dataset to SBERT examples")
         
-        def on_epoch_end(self, score, epoch, steps):
-            self.epoch = epoch
-            
-            # Log epoch
-            val_metrics = {
-                "cosine_similarity": score,
-                # Approximate accuracy from cosine similarity
-                "accuracy": (score + 1) / 2,  # Convert from [-1, 1] to [0, 1]
-                "macro_f1": None  # Not available for cosine similarity
-            }
-            
-            checkpoint_path = os.path.join(output_path, f"checkpoint-{epoch}")
-            
-            self.logger.log_epoch(
-                epoch=epoch,
-                train_loss=None,  # Not available from callback
-                val_metrics=val_metrics,
-                checkpoint_path=checkpoint_path
-            )
-            
-            # Track best checkpoint
-            if score > self.best_score:
-                self.best_score = score
-                self.best_checkpoint = checkpoint_path
-                self.logger.logger.info(f"New best model: {checkpoint_path}")
+        # For NLI-type training with SBERT, we follow the paper's approach:
+        # - Entailment pairs are considered similar (score of 1)
+        # - Contradiction pairs are considered dissimilar (score of 0)
+        # - Neutral pairs can be assigned a similarity score of 0.5
         
-        def on_step_end(self, score, epoch, steps, loss):
-            self.step += 1
+        label_mapping = {
+            "entailment": 1.0,
+            "neutral": 0.5,
+            "contradiction": 0.0
+        }
+        
+        # Log the label mapping
+        logger.logger.info(f"Using label mapping: {label_mapping}")
+        
+        # Convert datasets to SBERT format
+        train_examples = []
+        for item in train_data:
+            if item["label"] in label_mapping:
+                score = label_mapping[item["label"]]
+                train_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+        
+        dev_examples = []
+        for item in dev_data:
+            if item["label"] in label_mapping:
+                score = label_mapping[item["label"]]
+                dev_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+        
+        test_lay_examples = []
+        for item in test_lay_data:
+            if item["label"] in label_mapping:
+                score = label_mapping[item["label"]]
+                test_lay_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+        
+        test_expert_examples = []
+        for item in test_expert_data:
+            if item["label"] in label_mapping:
+                score = label_mapping[item["label"]]
+                test_expert_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+        
+        logger.logger.info(f"Created {len(train_examples)} training examples")
+        logger.logger.info(f"Created {len(dev_examples)} validation examples")
+        logger.logger.info(f"Created {len(test_lay_examples)} test_lay examples")
+        logger.logger.info(f"Created {len(test_expert_examples)} test_expert examples")
+        
+        # Create model
+        logger.logger.info(f"Creating model from {model_name}")
+        word_embedding_model = models.Transformer(model_name, max_seq_length=max_seq_length)
+        pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension())
+        model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+        
+        # Create evaluator for validation data
+        logger.logger.info("Creating evaluator")
+        evaluator = evaluation.EmbeddingSimilarityEvaluator(
+            dev_examples,
+            name="indonli-dev"
+        )
+        
+        # Create train dataloader
+        train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=batch_size)
+        
+        # Calculate warmup steps if not provided
+        if warmup_steps == 0:
+            warmup_steps = int(len(train_dataloader) * 0.1)
             
-            # Log every 100 steps
-            if self.step % 100 == 0:
-                self.logger.log_train_step(
+        logger.logger.info(f"Using {warmup_steps} warmup steps")
+        
+        # Create loss
+        train_loss = losses.CosineSimilarityLoss(model)
+        
+        # Setup training arguments
+        train_args = {
+            "epochs": num_epochs,
+            "evaluation_steps": int(len(train_dataloader) * 0.2),  # Evaluate every 20% of an epoch
+            "evaluator": evaluator,
+            "warmup_steps": warmup_steps,
+            "output_path": output_path,
+            "optimizer_params": {"lr": learning_rate},
+        }
+        
+        # Log training arguments
+        logger.logger.info(f"Training arguments: {train_args}")
+        
+        # Define custom callback to log with NLILogger
+        class LoggerCallback:
+            def __init__(self, logger):
+                self.logger = logger
+                self.step = 0
+                self.epoch = 0
+                self.best_score = -1
+                self.best_checkpoint = None
+            
+            def on_epoch_end(self, score, epoch, steps):
+                self.epoch = epoch
+                
+                # Log epoch
+                val_metrics = {
+                    "cosine_similarity": score,
+                    # Approximate accuracy from cosine similarity
+                    "accuracy": (score + 1) / 2,  # Convert from [-1, 1] to [0, 1]
+                    "macro_f1": None  # Not available for cosine similarity
+                }
+                
+                checkpoint_path = os.path.join(output_path, f"checkpoint-{epoch}")
+                
+                self.logger.log_epoch(
                     epoch=epoch,
-                    step=self.step,
-                    loss=loss,
-                    additional_metrics={"cosine_similarity": score}
+                    train_loss=None,  # Not available from callback
+                    val_metrics=val_metrics,
+                    checkpoint_path=checkpoint_path
                 )
-    
-    # Create logger callback
-    logger_callback = LoggerCallback(logger)
-    
-    # Train the model
-    logger.logger.info("Starting training")
-    model.fit(
-        train_objectives=[(train_dataloader, train_loss)],
-        callback=logger_callback.on_step_end,
-        epoch_callback=logger_callback.on_epoch_end,
-        **train_args
-    )
-    
-    # Evaluate on test sets
-    logger.logger.info("Evaluating on test sets")
-    
-    # Function to get similarity scores
-    def get_similarity_scores(model, examples):
-        sentences1 = [example.texts[0] for example in examples]
-        sentences2 = [example.texts[1] for example in examples]
-        gold_scores = [example.label for example in examples]
+                
+                # Track best checkpoint
+                if score > self.best_score:
+                    self.best_score = score
+                    self.best_checkpoint = checkpoint_path
+                    self.logger.logger.info(f"New best model: {checkpoint_path}")
+            
+            def on_step_end(self, score, epoch, steps, loss):
+                self.step += 1
+                
+                # Log every 100 steps
+                if self.step % 100 == 0:
+                    self.logger.log_train_step(
+                        epoch=epoch,
+                        step=self.step,
+                        loss=loss,
+                        additional_metrics={"cosine_similarity": score}
+                    )
         
-        # Get embeddings
-        embeddings1 = model.encode(sentences1, convert_to_tensor=True)
-        embeddings2 = model.encode(sentences2, convert_to_tensor=True)
+        # Create logger callback
+        logger_callback = LoggerCallback(logger)
         
-        # Calculate cosine similarity
-        cosine_scores = util.pytorch_cos_sim(embeddings1, embeddings2)
-        cosine_scores = cosine_scores.diag().cpu().numpy()
+        # Train the model
+        logger.logger.info("Starting training")
+        model.fit(
+            train_objectives=[(train_dataloader, train_loss)],
+            callback=logger_callback.on_step_end,
+            epoch_callback=logger_callback.on_epoch_end,
+            **train_args
+        )
         
-        # Convert similarity scores to predictions
-        # Map scores to classes: [0.0-0.33] -> contradiction, [0.34-0.66] -> neutral, [0.67-1.0] -> entailment
-        predictions = []
-        for score in cosine_scores:
-            if score < 0.33:
-                predictions.append(2)  # Contradiction
-            elif score < 0.66:
-                predictions.append(1)  # Neutral
-            else:
-                predictions.append(0)  # Entailment
+        # Evaluate on test sets
+        logger.logger.info("Evaluating on test sets")
         
-        # Convert gold scores to labels
-        # Map scores to classes: 0.0 -> contradiction, 0.5 -> neutral, 1.0 -> entailment
-        gold_labels = []
-        for score in gold_scores:
-            if score < 0.33:
-                gold_labels.append(2)  # Contradiction
-            elif score < 0.66:
-                gold_labels.append(1)  # Neutral
-            else:
-                gold_labels.append(0)  # Entailment
+        # Function to get similarity scores
+        def get_similarity_scores(model, examples):
+            sentences1 = [example.texts[0] for example in examples]
+            sentences2 = [example.texts[1] for example in examples]
+            gold_scores = [example.label for example in examples]
+            
+            # Get embeddings
+            embeddings1 = model.encode(sentences1, convert_to_tensor=True)
+            embeddings2 = model.encode(sentences2, convert_to_tensor=True)
+            
+            # Calculate cosine similarity
+            cosine_scores = util.pytorch_cos_sim(embeddings1, embeddings2)
+            cosine_scores = cosine_scores.diag().cpu().numpy()
+            
+            # Convert similarity scores to predictions
+            # Map scores to classes: [0.0-0.33] -> contradiction, [0.34-0.66] -> neutral, [0.67-1.0] -> entailment
+            predictions = []
+            for score in cosine_scores:
+                if score < 0.33:
+                    predictions.append(2)  # Contradiction
+                elif score < 0.66:
+                    predictions.append(1)  # Neutral
+                else:
+                    predictions.append(0)  # Entailment
+            
+            # Convert gold scores to labels
+            # Map scores to classes: 0.0 -> contradiction, 0.5 -> neutral, 1.0 -> entailment
+            gold_labels = []
+            for score in gold_scores:
+                if score < 0.33:
+                    gold_labels.append(2)  # Contradiction
+                elif score < 0.66:
+                    gold_labels.append(1)  # Neutral
+                else:
+                    gold_labels.append(0)  # Entailment
+            
+            return predictions, gold_labels
         
-        return predictions, gold_labels
+        # Evaluate on test_lay
+        logger.logger.info("Evaluating on test_lay dataset")
+        test_lay_predictions, test_lay_labels = get_similarity_scores(model, test_lay_examples)
+        logger.log_evaluation("test_lay", test_lay_predictions, test_lay_labels, checkpoint_name="final")
+        
+        # Evaluate on test_expert
+        logger.logger.info("Evaluating on test_expert dataset")
+        test_expert_predictions, test_expert_labels = get_similarity_scores(model, test_expert_examples)
+        logger.log_evaluation("test_expert", test_expert_predictions, test_expert_labels, checkpoint_name="final")
+        
+        # Generate visualizations and report
+        logger.plot_training_curve()
+        logger.compare_checkpoints()
+        logger.generate_summary_report()
+        
+        logger.logger.info("Training and evaluation complete")
+        
+        return model
     
-    # Evaluate on test_lay
-    logger.logger.info("Evaluating on test_lay dataset")
-    test_lay_predictions, test_lay_labels = get_similarity_scores(model, test_lay_examples)
-    logger.log_evaluation("test_lay", test_lay_predictions, test_lay_labels, checkpoint_name="final")
-    
-    # Evaluate on test_expert
-    logger.logger.info("Evaluating on test_expert dataset")
-    test_expert_predictions, test_expert_labels = get_similarity_scores(model, test_expert_examples)
-    logger.log_evaluation("test_expert", test_expert_predictions, test_expert_labels, checkpoint_name="final")
-    
-    # Generate visualizations and report
-    logger.plot_training_curve()
-    logger.compare_checkpoints()
-    logger.generate_summary_report()
-    
-    logger.logger.info("Training and evaluation complete")
-    
-    return model
+    except Exception as e:
+        logger.logger.error(f"An error occurred during training: {e}")
+        raise
 
 
 def test_model(model_path, test_examples):
@@ -598,39 +608,45 @@ def main():
     # Set random seed for reproducibility
     set_seed(args.seed)
     
-    # Setup either traditional logging or the new NLILogger
-    if args.use_new_logger:
-        logger = create_logger("similarity-sbert", args.output_path)
-        logger.log_hyperparameters(vars(args))
-        
-        # Train with new logger
-        train_sbert_with_logger(
-            model_name=args.model_name,
-            output_path=args.output_path,
-            batch_size=args.batch_size,
-            num_epochs=args.num_epochs,
-            warmup_steps=args.warmup_steps,
-            learning_rate=args.learning_rate,
-            max_seq_length=args.max_seq_length,
-            seed=args.seed,
-            logger=logger
-        )
-    else:
-        # Setup traditional logging
-        logger = setup_logging()
-        
-        # Train with traditional methods
-        train_sbert(
-            model_name=args.model_name,
-            output_path=args.output_path,
-            batch_size=args.batch_size,
-            num_epochs=args.num_epochs,
-            warmup_steps=args.warmup_steps,
-            learning_rate=args.learning_rate,
-            max_seq_length=args.max_seq_length,
-            seed=args.seed
-        )
-
+    try:
+        # Setup either traditional logging or the new NLILogger
+        if args.use_new_logger:
+            logger = create_logger("similarity-sbert", args.output_path)
+            logger.log_hyperparameters(vars(args))
+            
+            # Train with new logger
+            train_sbert_with_logger(
+                model_name=args.model_name,
+                output_path=args.output_path,
+                batch_size=args.batch_size,
+                num_epochs=args.num_epochs,
+                warmup_steps=args.warmup_steps,
+                learning_rate=args.learning_rate,
+                max_seq_length=args.max_seq_length,
+                seed=args.seed,
+                logger=logger
+            )
+        else:
+            # Setup traditional logging
+            logger = setup_logging()
+            
+            # Train with traditional methods
+            train_sbert(
+                model_name=args.model_name,
+                output_path=args.output_path,
+                batch_size=args.batch_size,
+                num_epochs=args.num_epochs,
+                warmup_steps=args.warmup_steps,
+                learning_rate=args.learning_rate,
+                max_seq_length=args.max_seq_length,
+                seed=args.seed
+            )
+    except Exception as e:
+        if args.use_new_logger and logger:
+            logger.logger.error(f"An error occurred during training: {e}")
+        else:
+            logging.error(f"An error occurred during training: {e}")
+        raise
 
 if __name__ == "__main__":
     main()

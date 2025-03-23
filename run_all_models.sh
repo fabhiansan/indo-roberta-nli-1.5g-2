@@ -58,6 +58,13 @@ run_model() {
     fi
 }
 
+# Create checkpoints directory for each model
+mkdir -p "${RESULTS_DIR}/roberta/checkpoints"
+mkdir -p "${RESULTS_DIR}/classifier/checkpoints"
+mkdir -p "${RESULTS_DIR}/similarity/checkpoints"
+mkdir -p "${RESULTS_DIR}/advanced/checkpoints"
+mkdir -p "${RESULTS_DIR}/improved/checkpoints"
+
 # 5. Run RoBERTa Model First (since this is the only one confirmed to work)
 echo "Running RoBERTa model first..."
 ROBERTA_CMD="python train.py \
