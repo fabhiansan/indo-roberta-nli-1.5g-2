@@ -402,10 +402,11 @@ def train_with_nli_logger(args, logger):
             raise RuntimeError(f"Failed to load dataset: {e}, {e2}")
     
     # Create datasets
-    train_data = NLIDataset(train_dataset, tokenizer, max_length=args.max_seq_length)
-    val_data = NLIDataset(val_dataset, tokenizer, max_length=args.max_seq_length)
-    test_lay_data = NLIDataset(test_lay_dataset, tokenizer, max_length=args.max_seq_length)
-    test_expert_data = NLIDataset(test_expert_dataset, tokenizer, max_length=args.max_seq_length)
+    max_seq_length = args.max_seq_length if hasattr(args, 'max_seq_length') else args.max_length
+    train_data = NLIDataset(train_dataset, tokenizer, max_length=max_seq_length)
+    val_data = NLIDataset(val_dataset, tokenizer, max_length=max_seq_length)
+    test_lay_data = NLIDataset(test_lay_dataset, tokenizer, max_length=max_seq_length)
+    test_expert_data = NLIDataset(test_expert_dataset, tokenizer, max_length=max_seq_length)
     
     # Create data loaders
     train_dataloader = DataLoader(
@@ -760,10 +761,11 @@ def train(args):
             raise RuntimeError(f"Failed to load dataset from either HF or local: {e}, {e2}")
     
     # Create datasets
-    train_dataset = NLIDataset(train_dataset, tokenizer, max_length=args.max_length)
-    validation_dataset = NLIDataset(validation_dataset, tokenizer, max_length=args.max_length)
-    test_lay_dataset = NLIDataset(test_lay_dataset, tokenizer, max_length=args.max_length)
-    test_expert_dataset = NLIDataset(test_expert_dataset, tokenizer, max_length=args.max_length)
+    max_seq_length = args.max_seq_length if hasattr(args, 'max_seq_length') else args.max_length
+    train_dataset = NLIDataset(train_dataset, tokenizer, max_length=max_seq_length)
+    validation_dataset = NLIDataset(validation_dataset, tokenizer, max_length=max_seq_length)
+    test_lay_dataset = NLIDataset(test_lay_dataset, tokenizer, max_length=max_seq_length)
+    test_expert_dataset = NLIDataset(test_expert_dataset, tokenizer, max_length=max_seq_length)
     
     # Create dataloaders
     train_dataloader = DataLoader(
@@ -829,7 +831,6 @@ def train(args):
         num_training_steps=total_steps
     )
     
-    # Training loop
     logger.info("Starting training...")
     best_f1 = 0
     patience_counter = 0

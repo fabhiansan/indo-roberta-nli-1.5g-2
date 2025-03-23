@@ -457,6 +457,9 @@ def train_with_nli_logger(args, logger):
     """
     # Log start of training
     logger.logger.info("Starting training of classifier-based SBERT model")
+    
+    # Set up device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.logger.info(f"Using device: {device}")
     
     # Load tokenizer and create model
@@ -464,7 +467,6 @@ def train_with_nli_logger(args, logger):
     model = SBERTModel(args.base_model)
     
     # Move model to device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     
     # Log dataset loading
