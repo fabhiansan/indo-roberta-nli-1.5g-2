@@ -58,62 +58,8 @@ run_model() {
     fi
 }
 
-# 1. Run Classifier-based SBERT
-CLASSIFIER_CMD="python indo_sbert_train.py \
-    --base_model ${BASE_MODEL} \
-    --output_dir ${RESULTS_DIR}/classifier \
-    --batch_size ${BATCH_SIZE} \
-    --num_epochs ${NUM_EPOCHS} \
-    --learning_rate ${LEARNING_RATE} \
-    --max_length ${MAX_LENGTH} \
-    --seed ${SEED} \
-    --use_new_logger"
-
-run_model "classifier-sbert" "${CLASSIFIER_CMD}"
-
-# 2. Run Similarity-based SBERT
-SIMILARITY_CMD="python sbert_train.py \
-    --model_name ${BASE_MODEL} \
-    --output_path ${RESULTS_DIR}/similarity \
-    --batch_size ${BATCH_SIZE} \
-    --num_epochs ${NUM_EPOCHS} \
-    --learning_rate ${LEARNING_RATE} \
-    --max_seq_length ${MAX_LENGTH} \
-    --seed ${SEED} \
-    --use_new_logger"
-
-run_model "similarity-sbert" "${SIMILARITY_CMD}"
-
-# 3. Run Advanced SBERT
-ADVANCED_CMD="python indo_sbert_advanced_train.py \
-    --base_model ${BASE_MODEL} \
-    --output_dir ${RESULTS_DIR}/advanced \
-    --batch_size ${BATCH_SIZE} \
-    --num_epochs ${NUM_EPOCHS} \
-    --learning_rate ${LEARNING_RATE} \
-    --max_length ${MAX_LENGTH} \
-    --seed ${SEED} \
-    --use_new_logger"
-
-run_model "advanced-sbert" "${ADVANCED_CMD}"
-
-# 4. Run Improved SBERT
-IMPROVED_CMD="python train_improved_sbert.py \
-    --base_model ${BASE_MODEL} \
-    --pooling_mode mean_pooling \
-    --classifier_hidden_size 256 \
-    --dropout 0.2 \
-    --use_cross_attention \
-    --output_dir ${RESULTS_DIR}/improved \
-    --batch_size ${BATCH_SIZE} \
-    --learning_rate ${LEARNING_RATE} \
-    --num_epochs ${NUM_EPOCHS} \
-    --seed ${SEED} \
-    --use_new_logger"
-
-run_model "improved-sbert" "${IMPROVED_CMD}"
-
-# 5. Run RoBERTa Model
+# 5. Run RoBERTa Model First (since this is the only one confirmed to work)
+echo "Running RoBERTa model first..."
 ROBERTA_CMD="python train.py \
     --model_name ${ROBERTA_MODEL} \
     --output_dir ${RESULTS_DIR}/roberta \
@@ -127,12 +73,72 @@ ROBERTA_CMD="python train.py \
 
 run_model "roberta-nli" "${ROBERTA_CMD}"
 
+# 1. Run Classifier-based SBERT
+echo "Running Classifier-based SBERT..."
+CLASSIFIER_CMD="python indo_sbert_train.py \
+    --base_model ${BASE_MODEL} \
+    --output_dir ${RESULTS_DIR}/classifier \
+    --batch_size ${BATCH_SIZE} \
+    --num_epochs ${NUM_EPOCHS} \
+    --learning_rate ${LEARNING_RATE} \
+    --max_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --use_new_logger"
+
+run_model "classifier-sbert" "${CLASSIFIER_CMD}"
+
+# 2. Run Similarity-based SBERT
+echo "Running Similarity-based SBERT..."
+SIMILARITY_CMD="python sbert_train.py \
+    --model_name ${BASE_MODEL} \
+    --output_path ${RESULTS_DIR}/similarity \
+    --batch_size ${BATCH_SIZE} \
+    --num_epochs ${NUM_EPOCHS} \
+    --learning_rate ${LEARNING_RATE} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --use_new_logger"
+
+run_model "similarity-sbert" "${SIMILARITY_CMD}"
+
+# 3. Run Advanced SBERT
+echo "Running Advanced SBERT..."
+ADVANCED_CMD="python indo_sbert_advanced_train.py \
+    --base_model ${BASE_MODEL} \
+    --output_dir ${RESULTS_DIR}/advanced \
+    --batch_size ${BATCH_SIZE} \
+    --num_epochs ${NUM_EPOCHS} \
+    --learning_rate ${LEARNING_RATE} \
+    --max_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --use_new_logger"
+
+run_model "advanced-sbert" "${ADVANCED_CMD}"
+
+# 4. Run Improved SBERT
+echo "Running Improved SBERT..."
+IMPROVED_CMD="python train_improved_sbert.py \
+    --base_model ${BASE_MODEL} \
+    --pooling_mode mean_pooling \
+    --classifier_hidden_size 256 \
+    --dropout 0.2 \
+    --use_cross_attention \
+    --output_dir ${RESULTS_DIR}/improved \
+    --batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --use_new_logger"
+
+run_model "improved-sbert" "${IMPROVED_CMD}"
+
 # Generate comparison results
 echo "" | tee -a "${RESULTS_DIR}/comparison.log"
 echo "=== Model Comparison Complete ===" | tee -a "${RESULTS_DIR}/comparison.log"
 echo "End time: $(date)" | tee -a "${RESULTS_DIR}/comparison.log"
 
-# Run comparison script (to be created later)
+# Run comparison script
 python compare_model_results.py --results_dir "${RESULTS_DIR}" | tee -a "${RESULTS_DIR}/comparison.log"
 
 echo "All models have been trained and evaluated. Results are in ${RESULTS_DIR}"

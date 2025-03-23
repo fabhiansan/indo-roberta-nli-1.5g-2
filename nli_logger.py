@@ -191,6 +191,11 @@ class NLILogger:
         Returns:
             Dictionary of metrics
         """
+        # Safety check for empty predictions or labels
+        if not predictions or not labels or len(predictions) == 0 or len(labels) == 0:
+            self.logger.warning(f"Empty predictions or labels for {dataset_name}. Cannot compute metrics.")
+            return {"accuracy": 0, "macro_f1": 0, "precision": 0, "recall": 0}
+            
         # Convert to numpy arrays if they are tensors
         if isinstance(predictions, torch.Tensor):
             predictions = predictions.cpu().numpy()
@@ -275,6 +280,11 @@ class NLILogger:
             dataset_name: Name of the dataset
             checkpoint_name: Name of the checkpoint (optional)
         """
+        # Check if the confusion matrix is empty or has zero size
+        if conf_mat is None or conf_mat.size == 0 or np.sum(conf_mat) == 0:
+            self.logger.warning(f"Empty confusion matrix for {dataset_name}. Skipping plot.")
+            return
+            
         plt.figure(figsize=(8, 6))
         sns.heatmap(
             conf_mat, 
