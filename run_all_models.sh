@@ -134,7 +134,7 @@ IMPROVED_CMD="python train_improved_sbert.py \
     --batch_size ${BATCH_SIZE} \
     --learning_rate ${LEARNING_RATE} \
     --num_epochs ${NUM_EPOCHS} \
-    --max_seq_length ${MAX_LENGTH} \
+    --max_length ${MAX_LENGTH} \
     --seed ${SEED} \
     --use_new_logger"
 

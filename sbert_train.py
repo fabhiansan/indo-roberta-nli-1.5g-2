@@ -329,27 +329,27 @@ def train_sbert_with_logger(
         # Convert datasets to SBERT format
         train_examples = []
         for item in train_data:
-            if item["label"] in label_mapping:
-                score = label_mapping[item["label"]]
-                train_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+            # Use a default score of 0.5 (neutral) for unknown labels
+            score = label_mapping.get(item["label"], 0.5)
+            train_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
         
         dev_examples = []
         for item in dev_data:
-            if item["label"] in label_mapping:
-                score = label_mapping[item["label"]]
-                dev_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+            # Use a default score of 0.5 (neutral) for unknown labels
+            score = label_mapping.get(item["label"], 0.5)
+            dev_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
         
         test_lay_examples = []
         for item in test_lay_data:
-            if item["label"] in label_mapping:
-                score = label_mapping[item["label"]]
-                test_lay_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+            # Use a default score of 0.5 (neutral) for unknown labels
+            score = label_mapping.get(item["label"], 0.5)
+            test_lay_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
         
         test_expert_examples = []
         for item in test_expert_data:
-            if item["label"] in label_mapping:
-                score = label_mapping[item["label"]]
-                test_expert_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
+            # Use a default score of 0.5 (neutral) for unknown labels
+            score = label_mapping.get(item["label"], 0.5)
+            test_expert_examples.append(InputExample(texts=[item["premise"], item["hypothesis"]], label=score))
         
         logger.logger.info(f"Created {len(train_examples)} training examples")
         logger.logger.info(f"Created {len(dev_examples)} validation examples")
